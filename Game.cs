@@ -240,6 +240,21 @@ namespace GameLogic
             //comm.ResultAttackElemental(shaman.cardsOnBoard[indexAttacker], (Elemental)opponent.cardsOnBoard[indexTarget]); // ResultAttack al momento non esiste.
 
         }
+        /// <summary>
+        /// Questa marco la devi rivedere te!!!!
+        /// </summary>
+        /// <param name="idAttacker"></param>
+        public void GetValidAttackableTarget(int idAttacker)
+        {
+            List<int> validTarget = new List<int>();
+            validTarget.Add(0);
+            foreach (Card temp in opponent.cardsOnBoard)
+                validTarget.Add(temp.id);
+
+
+            comm.SendValidAttackableTarget(validTarget);
+
+        }
 
         public void AttackPlayer(int idAttacker)
         {
