@@ -60,7 +60,7 @@ namespace GameLogic
                         Game.AllCardsOnBoard.Add(ElemTemp); // lo mette nella listona di tutte le carte sul board.
                         Game.AllyElementals.Add(ElemTemp.target); // aggiunge a lista di bersagli validi sul board.
                         if (ElemTemp.onAppear != null) // controlla se ci sono microazioni in OnAppear.
-                            if (ElemTemp.onAppear.Count > 0)
+                            if (ElemTemp.onAppear[0] != "")
                             {
                                 foreach (string microAct in ElemTemp.onAppear)
                                     validTargets.Add(MicroActions.getTargets(microAct));
@@ -128,14 +128,10 @@ namespace GameLogic
                             Elemental elemCard = (Elemental)cardTemp;
                             if (elemCard.rank > 1)
                             {
+                                canPlay = false;
                                 foreach (Card cTemp in cardsOnBoard)
                                     if (cTemp.name == elemCard.from)
-                                    {
-                                        canPlay = true;
-                                        break;
-                                    }
-                                    else
-                                        canPlay = false;
+                                        canPlay = true;                                        
                             }
 
 
