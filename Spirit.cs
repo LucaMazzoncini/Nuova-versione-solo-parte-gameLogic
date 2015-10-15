@@ -16,10 +16,12 @@ namespace GameLogic
             target = Enums.Target.Spirit;
         }
         public int essence;
-        public List<string> onAppear;
-        public List<string> onDeath;
-        
-
+        public List<string> onAppear = new List<string>();
+        public List<string> onDeath = new List<string>();
+        public override bool canAttack()
+        {
+            return false;
+        }
         public Spirit initFromInv(Invocation invTemp)
         {
             Card cardTemp = base.initFromInvocation(invTemp);

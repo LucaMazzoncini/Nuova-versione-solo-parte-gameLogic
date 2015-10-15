@@ -10,7 +10,7 @@ namespace GameLogic
         //aggiungere il cast limit
         public string name;
         public int id; //identificatore univoco che viene valorizzato quando entra in gioco
-        public List<Power> powers;
+        public List<Power> powers = new List<Power>();
         public Dictionary<Enums.Mana, int> manaCost;
         public Enums.Type type;
         public Enums.SubType subtype;
@@ -39,6 +39,10 @@ namespace GameLogic
             return null;
         }
         public virtual bool canAttackElem(Elemental targetElem, Player controller)
+        {
+            return false;
+        }
+        public virtual bool canAttack()
         {
             return false;
         }

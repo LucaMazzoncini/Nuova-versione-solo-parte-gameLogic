@@ -42,11 +42,14 @@
   <ItemGroup>
     <Compile Include="Bibliotheca.cs" />
     <Compile Include="Card.cs" />
+    <Compile Include="Communicator.cs" />
     <Compile Include="Elemental.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Invocation.cs" />
     <Compile Include="Mana.cs" />
+    <Compile Include="MessageDeseralizerAndParser.cs" />
+    <Compile Include="MessagesEnums.cs" />
     <Compile Include="MicroActions.cs" />
     <Compile Include="ParsedAction.cs" />
     <Compile Include="Player.cs" />

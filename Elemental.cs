@@ -22,12 +22,12 @@ namespace GameLogic
         public int hp;
         public int rank;
         public string from;
-        public List<Enums.Role> role;
-        public List<Enums.Properties> properties;
+        public List<Enums.Role> role = new List<Enums.Role>();
+        public List<Enums.Properties> properties = new List<Enums.Properties>();
         public List<string> onAppear = new List<string>();
-        public List<string> onDeath;
-        public List<Enums.Debuff> debuff { get; set; } //qui ci sarà la lista dei debuff che andranno parsati
-        public List<Enums.Buff> buff { get; set; }   //qui ci sarà la lista dei buff che andranno parsati7
+        public List<string> onDeath = new List<string>();
+        public List<Enums.Debuff> debuff = new List<Enums.Debuff>();//qui ci sarà la lista dei debuff che andranno parsati
+        public List<Enums.Buff> buff = new List<Enums.Buff>();   //qui ci sarà la lista dei buff che andranno parsati7
         public bool hasAttacked = false;
         public bool hasAttackedThunderborn = false; // flag solo per Thunderborn.
         public bool hasWeakness = true; // debolezza da evocazione.
@@ -94,7 +94,6 @@ namespace GameLogic
                 return targetElem;
             }              
         }
-
         public override bool canAttackElem(Elemental targetElem, Player controller)
         {
             if (this.hasAttacked == false && !this.debuff.Contains(Enums.Debuff.Asleep)) // check se ha già attaccato o se è addormentato
@@ -112,7 +111,6 @@ namespace GameLogic
             }
             return false;
         }
-
         public override Player attackPlayer(Player targetPlayer) //Attacco l'opponent e ritorno le eventuali modifiche.
         {
             for (int dmg = 0; dmg < this.strength; dmg++)
@@ -125,7 +123,6 @@ namespace GameLogic
 
             return targetPlayer;
         }
-
         public override bool canAttackPlayer(Player targetPlayer) //controllo se posso attaccare l'opponent oppure possiede una creatura con protezione ecc ecc...
         {
             if (this.hasAttacked == false && !this.debuff.Contains(Enums.Debuff.Asleep)) // check se ha già attaccato o se è addormentato
@@ -145,6 +142,18 @@ namespace GameLogic
             }
             return false;        
         }
+        public override bool canAttack()
+        {
+            Boolean canattack = true;
+
+            if (this.debuff.Contains(Enums.Debuff.Asleep) || this.hasAttacked == true)
+                canattack = false;
+            if (this.hasWeakness == true && !this.properties.Contains(Enums.Properties.Quickness))
+                canattack = false;
+            
+            return canattack;
+        }
+
 
         public bool powerIsInCd(int n) //controlla se il potere in posizione n della lista powersè in cd oppure no. Per sapere se è in cd si controlla in creatureStatus
         {
