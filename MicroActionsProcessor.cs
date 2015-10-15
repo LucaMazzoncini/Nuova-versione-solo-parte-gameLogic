@@ -70,7 +70,7 @@ namespace GameLogic
             {
                 if (targets[index].Count == 0)
                 {
-                    MicroActions.table[microactions[index]](/*dizionario di roba parsata */);
+                    //MicroActions.table[microactions[index]](/*dizionario di roba parsata */);
                     microactions.RemoveAt(index);
                     targets.RemoveAt(index);
                     continue;
