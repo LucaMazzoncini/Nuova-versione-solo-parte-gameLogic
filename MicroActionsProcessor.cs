@@ -14,10 +14,13 @@ namespace GameLogic
         {
             char separator = '.';
             int index = 0;
-            Dictionary<string, string> Parameters = new Dictionary<string, string>();
+            do
+            {
+                Dictionary<string, string> Parameters = new Dictionary<string, string>();
 
-            string[] Split = microaction[index].ToUpper().Split(separator);
-            Parameters.Add("Value", Split[1]);
+                string[] Split = microaction[index].ToUpper().Split(separator);
+                Parameters.Add("Value", Split[1]);
+            } while (microactions.Count > 0);
         }
         public static List<List<Enums.Target>> AcquireValidTargets(List<List<Enums.Target>> validTargets)
         {
@@ -29,24 +32,33 @@ namespace GameLogic
             microactions = microActions;
             return microActions;
         }
-        public static bool canProcessMicroactions()
+        public static bool canProcessMicroactions() // verifica che tutte le microazioni del potere, che richiedano bersaglio, abbiano almeno 1 bersaglio valido.
         {
             bool canProcess = false;
             bool[] canProc = new bool[targets.Count];
             bool norAllynorEnemy = false;
             int index = 0;
-            norAllynorEnemy = !targets[index].Contains(Enums.Target.Ally) && !targets[index].Contains(Enums.Target.Enemy);
-            
+
             do
             {
+                norAllynorEnemy = !targets[index].Contains(Enums.Target.Ally) && !targets[index].Contains(Enums.Target.Enemy);
                 if (targets[index].Count == 0)
                 {
                     canProc[index] = true;
                     index += 1;
-                    continue;
+                    if (index < targets.Count)
+                        continue;
+                    else
+                        break;
                 }
                 foreach (Enums.Target target in targets[index])
                 {
+                    if (target == Enums.Target.Player || target == Enums.Target.Shaman || target == Enums.Target.Opponent)
+                    {
+                        canProc[index] = true;
+                        index += 1;
+                        continue;
+                    }
                     if (targets[index].Contains(Enums.Target.Ally) || norAllynorEnemy)
                     {
                         foreach (Enums.Target allyTarget in Game.AllyElementals)
@@ -66,11 +78,14 @@ namespace GameLogic
                                 canProc[index] = true;
                     }
                 }
-                index += 1;
-                norAllynorEnemy = !targets[index].Contains(Enums.Target.Ally) && !targets[index].Contains(Enums.Target.Enemy);
-            } while (index < targets.Count);
+                index += 1;               
+            } while (index < targets.Count) ;
 
-            if (canProc[0] && canProc[1] && canProc[2])
+            int countTrue = 0;
+            for (int i = 0; i < canProc.Length; i++)
+                if (canProc[i] == true)
+                    countTrue += 1;
+            if (countTrue == canProc.Length)
                 canProcess = true;
             return canProcess;
         }

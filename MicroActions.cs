@@ -51,6 +51,7 @@ namespace GameLogic
                     break;
                 case "KILLALLY":
                     targetsList.Add(Enums.Target.Ally);
+                    targetsList.Add(Enums.Target.Elemental);
                     break;
                 case "SELFDAMAGE":
                     targetsList.Add(Enums.Target.Shaman);
@@ -78,14 +79,13 @@ namespace GameLogic
                     targetsList.Add(Enums.Target.Elemental);
                     break;
                 case "HEALYOUANDALLALLIES":
-                    targetsList.Add(Enums.Target.Shaman);
-                    targetsList.Add(Enums.Target.Ally);
+                    
                     break;
                 case "ADDMANA":
-                    targetsList.Add(Enums.Target.Mana);
+                    targetsList.Add(Enums.Target.Player);
                     break;
                 case "LOSTRANDOMELEMENT":
-                    targetsList.Add(Enums.Target.Mana);
+                    targetsList.Add(Enums.Target.Player);
                     break;
                 case "ASLEEP":
                     targetsList.Add(Enums.Target.Elemental);
