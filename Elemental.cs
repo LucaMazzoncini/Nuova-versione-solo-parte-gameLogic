@@ -149,8 +149,7 @@ namespace GameLogic
             if (this.debuff.Contains(Enums.Debuff.Asleep) || this.hasAttacked == true)
                 canattack = false;
             if (this.hasWeakness == true && !this.properties.Contains(Enums.Properties.Quickness))
-                canattack = false;
-            
+                canattack = false;           
             return canattack;
         }
 

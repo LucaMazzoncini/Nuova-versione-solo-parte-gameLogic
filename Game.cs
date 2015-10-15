@@ -214,7 +214,7 @@ namespace GameLogic
 
         public bool CanPlayCard(string name)
         {          
-            return shaman.CanPlayCard(bibliotheca.getCardByName(name));
+            return shaman.CanPlayCard(bibliotheca.getCardByName(name)) && isMyRound();
         }
 
         public void TargetEvent(int idTarget) //questa funzione riceve il target richiesto precedentemente
@@ -225,24 +225,25 @@ namespace GameLogic
 
         public void AttackTarget(int idAttacker, int idTarget)
         {
-            
-            int indexAttacker = 0;
-            int indexTarget = 0;
-            if (shaman.cardsOnBoard != null)
-                if (opponent.cardsOnBoard != null)
-                {
-                    for (indexAttacker = 0; indexAttacker < shaman.cardsOnBoard.Count; indexAttacker++)
-                        if (shaman.cardsOnBoard[indexAttacker].id == idAttacker)
-                            break;
-                    for (indexTarget = 0; indexTarget < opponent.cardsOnBoard.Count; indexTarget++)
-                        if (opponent.cardsOnBoard[indexTarget].id == idTarget)
-                            break;
+            if (isMyRound())
+            {
+                int indexAttacker = 0;
+                int indexTarget = 0;
+                if (shaman.cardsOnBoard != null)
+                    if (opponent.cardsOnBoard != null)
+                    {
+                        for (indexAttacker = 0; indexAttacker < shaman.cardsOnBoard.Count; indexAttacker++)
+                            if (shaman.cardsOnBoard[indexAttacker].id == idAttacker)
+                                break;
+                        for (indexTarget = 0; indexTarget < opponent.cardsOnBoard.Count; indexTarget++)
+                            if (opponent.cardsOnBoard[indexTarget].id == idTarget)
+                                break;
 
-                    if (shaman.cardsOnBoard[indexAttacker].canAttackElem((Elemental)opponent.cardsOnBoard[indexTarget], opponent))
-                        shaman.cardsOnBoard[indexAttacker].attackElemental((Elemental)opponent.cardsOnBoard[indexTarget]);
-                }
-            comm.ResultAttackElemental((Elemental)shaman.cardsOnBoard[indexAttacker], (Elemental)opponent.cardsOnBoard[indexTarget]); // ResultAttack al momento non esiste.
-
+                        if (shaman.cardsOnBoard[indexAttacker].canAttackElem((Elemental)opponent.cardsOnBoard[indexTarget], opponent))
+                            shaman.cardsOnBoard[indexAttacker].attackElemental((Elemental)opponent.cardsOnBoard[indexTarget]);
+                    }
+                comm.ResultAttackElemental((Elemental)shaman.cardsOnBoard[indexAttacker], (Elemental)opponent.cardsOnBoard[indexTarget]); // ResultAttack al momento non esiste.
+            }
         }
         /// <summary>
         /// Questa marco la devi rivedere te!!!!
@@ -265,17 +266,20 @@ namespace GameLogic
 
         public void AttackPlayer(int idAttacker)
         {
-            int indexAttacker = 0;
-            if (shaman.cardsOnBoard != null)
+            if (isMyRound())
+            {
+                int indexAttacker = 0;
+                if (shaman.cardsOnBoard != null)
                 {
                     for (indexAttacker = 0; indexAttacker < shaman.cardsOnBoard.Count; indexAttacker++)
                         if (shaman.cardsOnBoard[indexAttacker].id == idAttacker)
                             break;
-                
-            if (shaman.cardsOnBoard[indexAttacker].canAttackPlayer(opponent))
-                shaman.cardsOnBoard[indexAttacker].attackPlayer(opponent);
+
+                    if (shaman.cardsOnBoard[indexAttacker].canAttackPlayer(opponent))
+                        shaman.cardsOnBoard[indexAttacker].attackPlayer(opponent);
                 }
-            //comm.ResultAttackPlayer(shaman.cardsOnBoard[indexAttacker], opponent); // da implementare.
+                //comm.ResultAttackPlayer(shaman.cardsOnBoard[indexAttacker], opponent); // da implementare.
+            }
         }
 
 
