@@ -116,7 +116,7 @@ namespace GameLogic
         {
             foreach (Card cardTemp in shaman.cardsOnBoard)
                 if (cardTemp.id == id)
-                    //if (cardTemp.canAttack())
+                    if (cardTemp.canAttack())
                     comm.YouCanAttack(id);
 
         }
