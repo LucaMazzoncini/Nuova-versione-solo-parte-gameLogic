@@ -8,7 +8,17 @@ namespace GameLogic
     {
         public static List<string> microactions = new List<string>(); // stora la lista di microazioni del Power da processare.
         public static List<List<Enums.Target>> targets = new List<List<Enums.Target>>(); // store tutti i target validi di tutte le microazioni di cui è composto il Power. Se una Microaction è associata ad una lista di target vuota, significa che non richiede target in risoluzione.
+        public static List<Dictionary<string, string>> microactionParams = new List<Dictionary<string, string>>(); // store di tutti i Param da spedire alle funzioni di MicroActions.table
 
+        public static Dictionary<string,string> AcquireMicroactionsParams(List<string> microaction)
+        {
+            char separator = '.';
+            int index = 0;
+            Dictionary<string, string> Parameters = new Dictionary<string, string>();
+
+            string[] Split = microaction[index].ToUpper().Split(separator);
+            Parameters.Add("Value", Split[1]);
+        }
         public static List<List<Enums.Target>> AcquireValidTargets(List<List<Enums.Target>> validTargets)
         {
             targets = validTargets;
@@ -22,11 +32,10 @@ namespace GameLogic
         public static bool canProcessMicroactions()
         {
             bool canProcess = false;
-            bool[] canProc = new bool[3];
+            bool[] canProc = new bool[targets.Count];
             bool norAllynorEnemy = false;
             int index = 0;
             norAllynorEnemy = !targets[index].Contains(Enums.Target.Ally) && !targets[index].Contains(Enums.Target.Enemy);
-
             
             do
             {
