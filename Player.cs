@@ -101,6 +101,7 @@ namespace GameLogic
         {
             bool canPlay = true;
 
+            if (cardTemp != null)
             if (this.mana.CanPay(cardTemp.manaCost) && cardsOnBoard != null) //controlla che si possa pagare
             {
                 if (cardTemp.castLimit > 0) // check sul CastCounter. Se hai già raggiunto il castLimit, ritorna false.
