@@ -3,3 +3,7 @@
 /Properties/
 /bin/
 /.vs/
+/Communication/
+/MessageDeseralizerAndParser.cs
+/MessagesEnums.cs
+/Communicator.cs

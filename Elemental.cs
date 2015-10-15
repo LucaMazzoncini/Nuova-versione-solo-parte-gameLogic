@@ -25,9 +25,9 @@ namespace GameLogic
         public List<Enums.Role> role = new List<Enums.Role>();
         public List<Enums.Properties> properties = new List<Enums.Properties>();
         public List<string> onAppear = new List<string>();
-        public List<string> onDeath = new List<string>();
-        public List<Enums.Debuff> debuff = new List<Enums.Debuff>();//qui ci sarà la lista dei debuff che andranno parsati
-        public List<Enums.Buff> buff = new List<Enums.Buff>();   //qui ci sarà la lista dei buff che andranno parsati7
+        public List<string> onDeath  = new List<string>();
+        public List<Enums.Debuff> debuff = new List<Enums.Debuff>();
+        public List<Enums.Buff> buff = new List<Enums.Buff>();
         public bool hasAttacked = false;
         public bool hasAttackedThunderborn = false; // flag solo per Thunderborn.
         public bool hasWeakness = true; // debolezza da evocazione.
