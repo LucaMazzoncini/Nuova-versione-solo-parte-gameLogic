@@ -115,7 +115,7 @@ namespace GameLogic
             //tolgo le occorrenze inutili dalla lista
             targetsList = targetsList.Distinct<Enums.Target>().ToList<Enums.Target>();
 
-            return targetsList;
+            return targetsList; 
         }
 
         private static void armor(Params param)
@@ -237,11 +237,30 @@ namespace GameLogic
             int idTarget = Int32.Parse(param["idTarget"]);
             Elemental elemTemp = (Elemental)Game.FindTargetCardByID(idTarget);
             if (Game.IsAlly(elemTemp.id))
+            {
                 if (elemTemp.debuff != null)
+                {
+                    foreach (Enums.Debuff Debuff in elemTemp.debuff)
+                    {
+                        if (Debuff == Enums.Debuff.DecreasedStr)
+                            elemTemp.strength += 1;
+                        if (Debuff == Enums.Debuff.DecreasedCon)
+                            elemTemp.constitution += 1;
+                    }
                     elemTemp.debuff.Clear();
-                else
-                if (elemTemp.buff != null)
-                    elemTemp.buff.Clear();
+                }
+            }
+            else if (elemTemp.buff != null)
+            {
+                foreach (Enums.Buff Buff in elemTemp.buff)
+                {
+                    if (Buff == Enums.Buff.IncreasedCon)
+                        elemTemp.constitution -= 1;
+                    if (Buff == Enums.Buff.IncreasedStr)
+                        elemTemp.strength -= 1;
+                }
+                elemTemp.buff.Clear();
+            }
         }
 
         private static void AddCos(Params param)
@@ -249,8 +268,11 @@ namespace GameLogic
             int cosValue = Int32.Parse(param["Value"]);
             int idTarget = Int32.Parse(param["idTarget"]);
             Elemental elemTemp = (Elemental)Game.FindTargetCardByID(idTarget);
-            elemTemp.constitution += cosValue;
-            elemTemp.buff.Add(Enums.Buff.IncreasedCon);
+            for (int i = 0; i < cosValue; i++)
+            {
+                elemTemp.constitution += 1;
+                elemTemp.buff.Add(Enums.Buff.IncreasedCon);
+            }
         }
 
         private static void DecStr(Params param)
@@ -260,8 +282,10 @@ namespace GameLogic
             Elemental elemTemp = (Elemental)Game.FindTargetCardByID(idTarget);
             for (int i = 0; i < strValue; i++)
                 if (elemTemp.strength > 0)
+                {
                     elemTemp.strength -= 1;
-            elemTemp.debuff.Add(Enums.Debuff.DecreasedStr);
+                    elemTemp.debuff.Add(Enums.Debuff.DecreasedStr);
+                }
         }
 
         private static void Incurable(Params param)

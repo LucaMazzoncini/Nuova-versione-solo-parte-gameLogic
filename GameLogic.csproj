@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Bibliotheca.cs" />
     <Compile Include="Card.cs" />
+    <Compile Include="MicroActionsProcessor.cs" />
     <Compile Include="Communicator.cs" />
     <Compile Include="Elemental.cs" />
     <Compile Include="Enums.cs" />

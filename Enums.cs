@@ -52,6 +52,7 @@ namespace GameLogic
         public enum Target
         {
             None, Player, Shaman, Opponent, Elemental, Spirit, Mana, Ally, Enemy, Other
+                /* se tra i target validi di una microazione o di un attacco c'è ALLY, si ciclano le liste ALLY se c'è ENEMY le liste ENEMY*/
         }
     }
 }

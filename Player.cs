@@ -57,18 +57,18 @@ namespace GameLogic
                                 idTemp = cTemp.id + 1;
                         ElemTemp.id = idTemp;
                         cardsOnBoard.Insert(0, ElemTemp); // lo mette sul board inserendolo in prima posizione.
-                        Game.AllCardsOnBoard.Add(ElemTemp);
+                        Game.AllCardsOnBoard.Add(ElemTemp); // lo mette nella listona di tutte le carte sul board.
                         Game.AllyElementals.Add(ElemTemp.target); // aggiunge a lista di bersagli validi sul board.
                         if (ElemTemp.onAppear != null) // controlla se ci sono microazioni in OnAppear.
                             if (ElemTemp.onAppear.Count > 0)
                             {
                                 foreach (string microAct in ElemTemp.onAppear)
-                                    validTargets.Insert(0, MicroActions.getTargets(microAct));
-                                //qui ci sarebbe da mandare i target all'interfaccia che fa illuminare i target validi, prende quello selezionato
-                                //dall'utente e lo rimanda indietro come target effettivo della microazione.
-
-                                //foreach (string microaction in ElemTemp.onAppear) -- e qui andrebbero passati i Target effettivi alla chiamata delle MicroActions.
-                                    //ElemTemp.processMicroaction(ElemTemp.onAppear);                                        
+                                    validTargets.Add(MicroActions.getTargets(microAct));
+                                MicroActionsProcessor.AcquireValidTargets(validTargets); //stora bersagli.
+                                MicroActionsProcessor.AcquireMicroactions(ElemTemp.onAppear); // stora microazioni.
+                                if (MicroActionsProcessor.canProcessMicroactions()) // controlla se le microazioni hanno tutte almeno 1 target valido.
+                                    MicroActionsProcessor.ProcessMicroactions();
+                                                             
                             }
                         return ElemTemp;
 
@@ -97,7 +97,6 @@ namespace GameLogic
             }
             return null;
         }
-
         public bool CanPlayCard(Card cardTemp)
         {
             bool canPlay = true;
@@ -128,8 +127,11 @@ namespace GameLogic
                             }
 
                             Elemental elemCard = (Elemental)cardTemp;
-                            foreach (Elemental elemTemp in cardsOnBoard)
-                                if (elemCard.from != "" && elemCard.from != elemTemp.name)
+                                int count = 0;
+                                foreach (Elemental elemTemp in cardsOnBoard)
+                                    if (elemCard.rank > 1 && elemCard.from != elemTemp.name)
+                                        count += 1;
+                                if (count == elemCount)
                                     canPlay = false;
 
                         }
@@ -170,8 +172,7 @@ namespace GameLogic
                 canPlay = false;
 
             return canPlay;        
-        }
-                           
+        }                
         public void TargetUpdated()
         {
             //qui si deve sbloccare la microazione
@@ -179,7 +180,6 @@ namespace GameLogic
             // Card.power -> indice per locare la function nelle microactions
             // Microactions.table["power"](target come  param)     
         }
-
         public void InitCastCounter(Bibliotheca invList) //inizializza il castCounter
         {
 

@@ -31,6 +31,8 @@ namespace GameLogic
         public static List<Enums.Target> AllySpirits = new List<Enums.Target>();
         public static List<Enums.Target> EnemySpirits = new List<Enums.Target>();
         public static List<Card> AllCardsOnBoard = new List<Card>();
+        
+        
 
         #endregion
         public Game(string name)
