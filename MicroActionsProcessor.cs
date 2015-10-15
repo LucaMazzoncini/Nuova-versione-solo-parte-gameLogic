@@ -11,10 +11,12 @@ namespace GameLogic
 
         public static List<List<Enums.Target>> AcquireValidTargets(List<List<Enums.Target>> validTargets)
         {
+            targets = validTargets;
             return validTargets;
         }
         public static List<string> AcquireMicroactions(List<string> microActions)
         {
+            microactions = microActions;
             return microActions;
         }
         public static bool canProcessMicroactions()
