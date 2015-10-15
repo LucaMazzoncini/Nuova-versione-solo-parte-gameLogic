@@ -1,2 +1,5 @@
 /obj/
 *.cs.meta
+/Properties/
+/bin/
+/.vs/

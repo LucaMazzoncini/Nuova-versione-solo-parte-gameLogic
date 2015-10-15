@@ -40,15 +40,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Action.cs" />
-    <Compile Include="ArmorAction.cs" />
     <Compile Include="Bibliotheca.cs" />
+    <Compile Include="Card.cs" />
+    <Compile Include="Elemental.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Invocation.cs" />
+    <Compile Include="Mana.cs" />
+    <Compile Include="MicroActions.cs" />
     <Compile Include="ParsedAction.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="Power.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Ritual.cs" />
+    <Compile Include="Spirit.cs" />
+    <Compile Include="Target.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
