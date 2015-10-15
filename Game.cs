@@ -125,6 +125,8 @@ namespace GameLogic
 
             //qui va' presa la carta ed aggiunta all'opponent
             opponent.cardsOnBoard.Add(card);
+            Game.AllCardsOnBoard.Add(card);
+            Game.EnemyElementals.Add(card.target); //!!!!!!ATTENTO IL TARGET E' DA VALORIZZARE aggiunge a lista di bersagli validi sul board.
 
         }
         public void GetPlayerMana()
@@ -237,7 +239,7 @@ namespace GameLogic
                     if (shaman.cardsOnBoard[indexAttacker].canAttackElem((Elemental)opponent.cardsOnBoard[indexTarget], opponent))
                         shaman.cardsOnBoard[indexAttacker].attackElemental((Elemental)opponent.cardsOnBoard[indexTarget]);
                 }
-            //comm.ResultAttackElemental(shaman.cardsOnBoard[indexAttacker], (Elemental)opponent.cardsOnBoard[indexTarget]); // ResultAttack al momento non esiste.
+            comm.ResultAttackElemental((Elemental)shaman.cardsOnBoard[indexAttacker], (Elemental)opponent.cardsOnBoard[indexTarget]); // ResultAttack al momento non esiste.
 
         }
         /// <summary>
@@ -248,9 +250,12 @@ namespace GameLogic
         {
             List<int> validTarget = new List<int>();
             validTarget.Add(0);
+            validTarget.Add(1);
             foreach (Card temp in opponent.cardsOnBoard)
                 validTarget.Add(temp.id);
 
+            foreach (Card temp in shaman.cardsOnBoard)
+                validTarget.Add(temp.id);
 
             comm.SendValidAttackableTarget(validTarget);
 
