@@ -100,7 +100,7 @@ namespace GameLogic
         public bool CanPlayCard(Card cardTemp)
         {
             bool canPlay = true;
-            if(cardTemp != null)
+
             if (this.mana.CanPay(cardTemp.manaCost) && cardsOnBoard != null) //controlla che si possa pagare
             {
                 if (cardTemp.castLimit > 0) // check sul CastCounter. Se hai già raggiunto il castLimit, ritorna false.
@@ -121,20 +121,28 @@ namespace GameLogic
                                 if (cTemp.type == Enums.Type.Elemental)
                                     elemCount += 1;
                             if (elemCount == 3)
-                            {
                                 canPlay = false;
-                                break;
-                            }
+                            else
+                                canPlay = true;
 
                             Elemental elemCard = (Elemental)cardTemp;
-                                int count = 0;
-                                foreach (Elemental elemTemp in cardsOnBoard)
-                                    if (elemCard.rank > 1 && elemCard.from != elemTemp.name)
-                                        count += 1;
-                                if (count == elemCount)
-                                    canPlay = false;
+                            if (elemCard.rank > 1)
+                            {
+                                foreach (Card cTemp in cardsOnBoard)
+                                    if (cTemp.name == elemCard.from)
+                                    {
+                                        canPlay = true;
+                                        break;
+                                    }
+                                    else
+                                        canPlay = false;
+                            }
+
+
 
                         }
+                        else
+                            canPlay = false;
                         break;
                     case Enums.Type.Spirit:
 
@@ -166,10 +174,8 @@ namespace GameLogic
                         break;
                 }
             }
-            else
-                canPlay = false;
-            else
-                canPlay = false;
+            else canPlay = false; //se non puoi pagare torna falso;
+           
 
             return canPlay;        
         }                
