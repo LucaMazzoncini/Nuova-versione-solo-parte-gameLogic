@@ -7,3 +7,4 @@
 /MessageDeseralizerAndParser.cs
 /MessagesEnums.cs
 /Communicator.cs
+*.sln.meta

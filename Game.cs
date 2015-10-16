@@ -278,7 +278,7 @@ namespace GameLogic
                     if (shaman.cardsOnBoard[indexAttacker].canAttackPlayer(opponent))
                         shaman.cardsOnBoard[indexAttacker].attackPlayer(opponent);
                 }
-                //comm.ResultAttackPlayer(shaman.cardsOnBoard[indexAttacker], opponent); // da implementare.
+                comm.ResultAttackPlayer(shaman.cardsOnBoard[indexAttacker], opponent); // da implementare.
             }
         }
 

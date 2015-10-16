@@ -42,7 +42,6 @@ namespace GameLogic
         {
             if(CanPlayCard(cardTemp))
             {
-                List<List<Enums.Target>> validTargets = new List<List<Enums.Target>>(); // target validi delle microazioni contenute in OnAppear o Powers. A stessono indice corrispondo Microazione e Target validi.
                 this.mana.PayMana(cardTemp.manaCost); // paghi il costo di mana.
                 if (cardTemp.castLimit > 0)
                     castCounter[cardTemp.name] -= 1;
@@ -91,8 +90,8 @@ namespace GameLogic
                                     validTargets.Add(MicroActions.getTargets(microAct));
                                 MicroActionsProcessor.AcquireValidTargets(validTargets); //stora bersagli.
                                 MicroActionsProcessor.AcquireMicroactions(ElemTemp.onAppear); // stora microazioni.
-                                if (MicroActionsProcessor.canProcessMicroactions()) // controlla se le microazioni hanno tutte almeno 1 target valido.
-                                    Console.WriteLine("Funziona abbestia"); //MicroActionsProcessor.ProcessMicroactions();
+                                if (MicroActionsProcessor.canProcessMicroactions()) ; // controlla se le microazioni hanno tutte almeno 1 target valido.
+                                    //MicroActionsProcessor.ProcessMicroactions();
                                                              
                             }
                         return ElemTemp;
