@@ -42,11 +42,12 @@ namespace GameLogic
         {
             if(CanPlayCard(cardTemp))
             {
+                List<List<Enums.Target>> validTargets = new List<List<Enums.Target>>(); // target validi delle microazioni contenute in OnAppear o Powers. A stessono indice corrispondo Microazione e Target validi.
                 this.mana.PayMana(cardTemp.manaCost); // paghi il costo di mana.
                 if (cardTemp.castLimit > 0)
                     castCounter[cardTemp.name] -= 1;
                 int idTemp = 2;
-                List<List<Enums.Target>> validTargets = new List<List<Enums.Target>>(); // target validi delle microazioni contenute in OnAppear. A stessono indice corrispondo Microazione e Target validi.
+               
 
                 switch (cardTemp.type)
                 {
@@ -56,6 +57,30 @@ namespace GameLogic
                             if (idTemp <= cTemp.id)
                                 idTemp = cTemp.id + 1;
                         ElemTemp.id = idTemp;
+                        if (ElemTemp.rank > 1) // da qui si attiva tutto quel che succede quando casti un rank 2 o 3 e "sovrascrive" il suo rank 1.
+                        foreach (Elemental eTemp in cardsOnBoard)
+                           if (eTemp.name == ElemTemp.from)
+                                {
+                                    ElemTemp.buff = eTemp.buff; // il rank sotto passa buff e debuff a quello sopra.
+                                    ElemTemp.debuff = eTemp.debuff;
+                                    foreach (Enums.Buff buff in ElemTemp.buff) // modifica Strength e Constitution in base a buff e debuff passati
+                                    {
+                                        if (buff == Enums.Buff.IncreasedStr)
+                                            ElemTemp.strength += 1;
+                                        if (buff == Enums.Buff.IncreasedCon)
+                                            ElemTemp.constitution += 1;
+                                    }
+                                    foreach (Enums.Debuff debuff in ElemTemp.debuff)
+                                    {
+                                        if (debuff == Enums.Debuff.DecreasedStr)
+                                            ElemTemp.strength -= 1;
+                                        if (debuff == Enums.Debuff.DecreasedCon)
+                                            ElemTemp.constitution -= 1;
+                                    }
+
+                                    Game.RemoveCardById(eTemp.id); // rimuove il rank sotto da ogni lista di Game.
+                                    break;
+                                }        
                         cardsOnBoard.Insert(0, ElemTemp); // lo mette sul board inserendolo in prima posizione.
                         Game.AllCardsOnBoard.Add(ElemTemp); // lo mette nella listona di tutte le carte sul board.
                         Game.AllyElementals.Add(ElemTemp.target); // aggiunge a lista di bersagli validi sul board.
@@ -67,7 +92,7 @@ namespace GameLogic
                                 MicroActionsProcessor.AcquireValidTargets(validTargets); //stora bersagli.
                                 MicroActionsProcessor.AcquireMicroactions(ElemTemp.onAppear); // stora microazioni.
                                 if (MicroActionsProcessor.canProcessMicroactions()) // controlla se le microazioni hanno tutte almeno 1 target valido.
-                                    MicroActionsProcessor.ProcessMicroactions();
+                                    Console.WriteLine("Funziona abbestia"); //MicroActionsProcessor.ProcessMicroactions();
                                                              
                             }
                         return ElemTemp;

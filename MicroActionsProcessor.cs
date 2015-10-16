@@ -109,14 +109,14 @@ namespace GameLogic
                 canProcess = true;
             return canProcess;
         }
-        public static void ProcessMicroactions()
+      /*  public static void ProcessMicroactions()
         {
             int index = 0;
             do
             {
                 if (targets[index].Count == 0)
                 {
-                    //MicroActions.table[microactions[index]](/*dizionario di roba parsata */);
+                    //MicroActions.table[microactions[index]](/*dizionario di roba parsata );
                     microactions.RemoveAt(index);
                     targets.RemoveAt(index);
                     continue;
@@ -129,8 +129,8 @@ namespace GameLogic
 
 
             } while (microactions.Count > 0);
-        }
-
+        } */
+   
 
 
 
