@@ -59,7 +59,10 @@ namespace GameLogic
                     {
                         canProc[index] = true;
                         index += 1;
-                        continue;
+                        if (index < targets.Count)
+                            continue;
+                        else
+                            break;
                     }
                     if (targets[index].Contains(Enums.Target.Ally) || norAllynorEnemy)
                     {
