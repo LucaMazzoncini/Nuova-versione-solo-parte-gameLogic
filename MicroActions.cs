@@ -78,7 +78,7 @@ namespace GameLogic
                 case "HEALELEMENTAL":
                     targetsList.Add(Enums.Target.Elemental);
                     break;
-                case "HEALYOUANDALLALLIES":
+                case "HEALYOUANDALLALLIES": 
                     
                     break;
                 case "ADDMANA":

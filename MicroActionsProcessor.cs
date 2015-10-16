@@ -10,17 +10,19 @@ namespace GameLogic
         public static List<List<Enums.Target>> targets = new List<List<Enums.Target>>(); // store tutti i target validi di tutte le microazioni di cui è composto il Power. Se una Microaction è associata ad una lista di target vuota, significa che non richiede target in risoluzione.
         public static List<Dictionary<string, string>> microactionParams = new List<Dictionary<string, string>>(); // store di tutti i Param da spedire alle funzioni di MicroActions.table
 
-        public static Dictionary<string,string> AcquireMicroactionsParams(List<string> microaction)
+        public static void AcquireMicroactionsParams(List<string> microaction)
         {
-            char separator = '.';
+            char[] separator = new char[] { '.', ' ' };
             int index = 0;
+            string[] Split;
             do
             {
-                Dictionary<string, string> Parameters = new Dictionary<string, string>();
-
-                string[] Split = microaction[index].ToUpper().Split(separator);
-                Parameters.Add("Value", Split[1]);
-            } while (microactions.Count > 0);
+                Split = microaction[index].ToUpper().Split(separator);
+                if (!Split[0].Equals("COOLDOWN"))
+                microactionParams[index].Add("Value", Split[1]);
+                //if (targets[index].Count > 0)
+                    //TargetAcquired();
+            } while (index < microaction.Count);
         }
         public static List<List<Enums.Target>> AcquireValidTargets(List<List<Enums.Target>> validTargets)
         {
