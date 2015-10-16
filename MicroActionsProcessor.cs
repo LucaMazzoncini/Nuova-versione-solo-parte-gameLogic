@@ -48,7 +48,7 @@ namespace GameLogic
                 {
                     canProc[index] = true;
                     index += 1;
-                    if (index < targets.Count)
+                    if (index < canProc.Length)
                         continue;
                     else
                         break;
@@ -59,7 +59,7 @@ namespace GameLogic
                     {
                         canProc[index] = true;
                         index += 1;
-                        if (index < targets.Count)
+                        if (index < canProc.Length)
                             continue;
                         else
                             break;
@@ -68,23 +68,38 @@ namespace GameLogic
                     {
                         foreach (Enums.Target allyTarget in Game.AllyElementals)
                             if (target == allyTarget)
+                            {
                                 canProc[index] = true;
+                                break;
+                            }
                         foreach (Enums.Target allyTarget in Game.AllySpirits)
                             if (target == allyTarget)
+                            {
                                 canProc[index] = true;
+                                break;
+                            }
                     }
                     if (targets[index].Contains(Enums.Target.Enemy) || norAllynorEnemy)
                     {
                         foreach (Enums.Target EnemyTarget in Game.EnemyElementals)
                             if (target == EnemyTarget)
+                            {
                                 canProc[index] = true;
+                                break;
+                            }
                         foreach (Enums.Target EnemyTarget in Game.EnemySpirits)
                             if (target == EnemyTarget)
+                            {
                                 canProc[index] = true;
+                                break;
+                            }
                     }
+                    if (canProc[index])
+                        break;
                 }
+                if (index < canProc.Length)
                 index += 1;               
-            } while (index < targets.Count) ;
+            } while (index < targets.Count);
 
             int countTrue = 0;
             for (int i = 0; i < canProc.Length; i++)
