@@ -220,7 +220,6 @@ namespace GameLogic
                 }
             }
         }
-
         public bool CanPlayCard(string name)
         {          
             return shaman.CanPlayCard(bibliotheca.getCardByName(name)) && isMyRound();
