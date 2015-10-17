@@ -245,6 +245,14 @@ namespace GameLogic
                 comm.ResultAttackElemental((Elemental)shaman.cardsOnBoard[indexAttacker], (Elemental)opponent.cardsOnBoard[indexTarget]); // ResultAttack al momento non esiste.
             }
         }
+
+        public void TargetReturn(int id)
+        {
+
+            //comm.SendValidTargets(List < int > targets);
+            //con questo id ci fai che ti pare!!!!
+        }
+
         /// <summary>
         /// Questa marco la devi rivedere te!!!!
         /// </summary>
@@ -252,7 +260,7 @@ namespace GameLogic
         public void GetValidAttackableTarget(int idAttacker)
         {
             List<int> validTarget = new List<int>();
-            validTarget.Add(0);
+          validTarget.Add(0);
             validTarget.Add(1);
             foreach (Card temp in opponent.cardsOnBoard)
                 validTarget.Add(temp.id);
@@ -390,7 +398,10 @@ namespace GameLogic
             if (AllCardsOnBoard != null)
                 foreach (Card cardTemp in AllCardsOnBoard)
                     if (cardTemp.id == idTemp)
+                    {
                         AllCardsOnBoard.Remove(cardTemp); // rimuove dalla lista di tutte le carte sul board                    
+                        break;
+                    }
         }
 
         public static bool IsAlly(int idTemp)

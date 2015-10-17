@@ -40,8 +40,10 @@ namespace GameLogic
 
         public Card PlayCard(Card cardTemp)
         {
-            if(CanPlayCard(cardTemp))
+            
+            if (CanPlayCard(cardTemp))
             {
+                List <List < Enums.Target >> validTargets = new List<List<Enums.Target>>();
                 this.mana.PayMana(cardTemp.manaCost); // paghi il costo di mana.
                 if (cardTemp.castLimit > 0)
                     castCounter[cardTemp.name] -= 1;
