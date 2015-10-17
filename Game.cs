@@ -208,7 +208,16 @@ namespace GameLogic
             {
                 Card playedCard = shaman.PlayCard(bibliotheca.getCardByName(name));
                 comm.sendMana(shaman.mana);
-                comm.SendPlayedCard(playedCard);
+                if (playedCard.type != Enums.Type.Elemental)
+                    comm.SendPlayedCard(playedCard);
+                else
+                {
+                    Elemental ele = (Elemental) playedCard;
+                    if (ele.rank < 2)
+                        comm.SendPlayedCard(playedCard);
+                    else
+                        comm.UpdateElemental(ele);
+                }
             }
         }
 
