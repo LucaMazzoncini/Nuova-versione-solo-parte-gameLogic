@@ -16,9 +16,9 @@ namespace GameLogic
         public Enums.SubType subtype;
         public int castLimit;
         public Enums.Target target;
-        public string Power_A;
-        public string Power_B;
-        public string Power_C;
+        public string Power_A = "";
+        public string Power_B = "";
+        public string Power_C = "";
 
         string card; // stringa di info parsate da Xml, inizializzata da invocation
 
