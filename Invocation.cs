@@ -27,6 +27,9 @@ namespace GameLogic
         public List<string> onAppear { get; set; }
         public List<string> onDeath { get; set; }
         public string flavour { get; set; }
+        public string Power_A;
+        public string Power_B;
+        public string Power_C;
         private System.Xml.XmlDocument xmlDoc;
 
         private string card; //in questa stringa ci vanno tutte le informazioni lette che vanno passate all'interfaccia
