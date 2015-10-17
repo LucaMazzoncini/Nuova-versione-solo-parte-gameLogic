@@ -24,6 +24,22 @@ namespace GameLogic
             MicroActions.table = new Dictionary<string, Action<Params>>();
             MicroActions.table.Add("Armor", armor);
             MicroActions.table.Add("Kill", kill);
+            MicroActions.table.Add("Damage", Damage);
+            MicroActions.table.Add("DamageElemental", DamageElemental);
+            MicroActions.table.Add("DamagePlayer", DamagePlayer);
+            MicroActions.table.Add("SelfDamage", SelfDamage);
+            MicroActions.table.Add("Dispel", Dispel);
+            MicroActions.table.Add("AddCos", AddCos);
+            MicroActions.table.Add("DecStr", DecStr);
+            MicroActions.table.Add("Incurable", Incurable);
+            MicroActions.table.Add("Asleep", Asleep);
+            MicroActions.table.Add("Shield", Shield);
+            MicroActions.table.Add("Poison", Poison);
+            MicroActions.table.Add("HealElemental", HealElemental);
+            MicroActions.table.Add("Heal", Heal);
+            MicroActions.table.Add("HealYouAndAllAllies", HealYouAndAllAllies);
+            MicroActions.table.Add("AddMana", AddMana);
+            MicroActions.table.Add("LostRandomElement", LostRandomElement);
         }
 
         //Vanno aggiunti tutti i case delle microazioni
@@ -54,7 +70,7 @@ namespace GameLogic
                     targetsList.Add(Enums.Target.Elemental);
                     break;
                 case "SELFDAMAGE":
-                    targetsList.Add(Enums.Target.Shaman);
+                    
                     break;
                 case "DECSTR":
                     targetsList.Add(Enums.Target.Elemental);
@@ -136,7 +152,6 @@ namespace GameLogic
 
             // Send to communicator
         }
-
         private static void kill(Params param)
         {
             int idCard = Int32.Parse(param["idTarget"]);
@@ -149,7 +164,6 @@ namespace GameLogic
             }
 
         }
-
         private static void killAlly(Params param)
         {
             int idCard = Int32.Parse(param["idTarget"]);
@@ -163,7 +177,6 @@ namespace GameLogic
             }
 
         }
-
         private static void Damage(Params param)
         {
             int damageValue = Int32.Parse(param["Value"]);
@@ -194,7 +207,6 @@ namespace GameLogic
                 }
             }
         }
-
         private static void DamageElemental(Params param)
         {
             int damageValue = Int32.Parse(param["Value"]);
@@ -215,7 +227,6 @@ namespace GameLogic
                 }
             }
         }
-
         private static void DamagePlayer(Params param)
         {
             int damageValue = Int32.Parse(param["Value"]);
@@ -224,14 +235,12 @@ namespace GameLogic
             playerTemp.hp -= damageValue;
 
         }
-
         private static void SelfDamage(Params param)
         {
             int damageValue = Int32.Parse(param["Value"]);
             Player playerTemp = Game.FindTargetPlayerById(0);
             playerTemp.hp -= damageValue;
         }
-
         private static void Dispel(Params param)
         {
             int idTarget = Int32.Parse(param["idTarget"]);
@@ -262,7 +271,6 @@ namespace GameLogic
                 elemTemp.buff.Clear();
             }
         }
-
         private static void AddCos(Params param)
         {
             int cosValue = Int32.Parse(param["Value"]);
@@ -274,7 +282,6 @@ namespace GameLogic
                 elemTemp.buff.Add(Enums.Buff.IncreasedCon);
             }
         }
-
         private static void DecStr(Params param)
         {
             int strValue = Int32.Parse(param["Value"]);
@@ -287,7 +294,6 @@ namespace GameLogic
                     elemTemp.debuff.Add(Enums.Debuff.DecreasedStr);
                 }
         }
-
         private static void Incurable(Params param)
         {
             int idCard = Int32.Parse(param["idTarget"]);
@@ -299,7 +305,6 @@ namespace GameLogic
             }
 
         }
-
         private static void Asleep(Params param)
         {
             int idCard = Int32.Parse(param["idTarget"]);
@@ -310,7 +315,6 @@ namespace GameLogic
                 elemTemp.debuff.Add(Enums.Debuff.Asleep);
             }
         }
-
         private static void Shield(Params param)
         {
             int idCard = Int32.Parse(param["idTarget"]);
@@ -321,7 +325,6 @@ namespace GameLogic
                 elemTemp.buff.Add(Enums.Buff.Shield);
             }
         }
-
         private static void Poison(Params param)
         {
             int idCard = Int32.Parse(param["idTarget"]);
@@ -342,7 +345,6 @@ namespace GameLogic
                     }
             }
         }
-
         private static void HealElemental(Params param)
         {
             int healValue = Int32.Parse(param["Value"]);
@@ -357,7 +359,6 @@ namespace GameLogic
                             elemTemp.hp += 1;
             }
         }
-
         private static void Heal(Params param)
         {
             int healValue = Int32.Parse(param["Value"]);
@@ -383,7 +384,6 @@ namespace GameLogic
                 }
             }
         }
-
         private static void HealYouAndAllAllies(Params param)
         {
             int healValue = Int32.Parse(param["Value"]);
@@ -399,7 +399,6 @@ namespace GameLogic
             }
 
         }
-
         private static void AddMana(Params param)
         {
             int manaValue = Int32.Parse(param["Value"]);
@@ -411,7 +410,6 @@ namespace GameLogic
             playerTemp.mana.AddMana(manaAdd);
 
         }
-
         private static void LostRandomElement(Params param)
         {
             int idTarget = Int32.Parse(param["idTarget"]);

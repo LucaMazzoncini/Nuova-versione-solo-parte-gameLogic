@@ -48,7 +48,6 @@ namespace GameLogic
         {
             return myRound;
         }
-
         public string GetOppenentName()
         {
             return opponent.Name;
@@ -254,31 +253,22 @@ namespace GameLogic
                 comm.ResultAttackElemental((Elemental)shaman.cardsOnBoard[indexAttacker], (Elemental)opponent.cardsOnBoard[indexTarget]); // ResultAttack al momento non esiste.
             }
         }
-
-        public void TargetReturn(int id)
+        
+        public static void TargetReturn(int id)
         {
-
-            //comm.SendValidTargets(List < int > targets);
-            //con questo id ci fai che ti pare!!!!
+            MicroActionsProcessor.TargetId = id;
         }
 
-        /// <summary>
-        /// Questa marco la devi rivedere te!!!!
-        /// </summary>
-        /// <param name="idAttacker"></param>
         public void GetValidAttackableTarget(int idAttacker)
         {
-            List<int> validTarget = new List<int>();
-          validTarget.Add(0);
-            validTarget.Add(1);
-            foreach (Card temp in opponent.cardsOnBoard)
-                validTarget.Add(temp.id);
-
-            foreach (Card temp in shaman.cardsOnBoard)
-                validTarget.Add(temp.id);
-
-            comm.SendValidAttackableTarget(validTarget);
-
+            List<int> idList = new List<int>();
+            Elemental elemTemp = (Elemental)FindTargetCardByID(idAttacker);
+            if (elemTemp.canAttackPlayer(opponent))
+                idList.Add(1);
+            foreach (Elemental elem in opponent.cardsOnBoard)
+                if (elemTemp.canAttackElem(elem, opponent))
+                    idList.Add(elem.id);
+            comm.SendValidAttackableTarget(idList);
         }
 
         public void AttackPlayer(int idAttacker)
@@ -299,6 +289,80 @@ namespace GameLogic
             }
         }
 
+        public static List<int> FindAllValidTargetsId(List<Enums.Target> targetList) // gli passi una lista di tipi di bersagli validi e ti ritorna la lista degli ID dei bersagli effettivamente validi.
+        {
+            List<int> idList = new List<int>();
+            if (targetList != null)
+                    if (targetList.Contains(Enums.Target.Shaman))
+                        idList.Add(0);
+                    if (targetList.Contains(Enums.Target.Opponent))
+                        idList.Add(1);
+                    if (targetList.Contains(Enums.Target.Player))
+                    {
+                        idList.Add(0);
+                        idList.Add(1);
+                    }
+             if (targetList.Contains(Enums.Target.Elemental))
+            {
+                if (targetList.Contains(Enums.Target.Ally))
+                    foreach (Card cardTemp in shaman.cardsOnBoard)
+                        if (cardTemp.type == Enums.Type.Elemental)
+                        idList.Add(cardTemp.id);
+                if (targetList.Contains(Enums.Target.Enemy))
+                    foreach (Card cardTemp in opponent.cardsOnBoard)
+                        if (cardTemp.type == Enums.Type.Elemental)
+                            idList.Add(cardTemp.id);
+                if (!targetList.Contains(Enums.Target.Ally) && !targetList.Contains(Enums.Target.Enemy))
+                    foreach (Card cardTemp in AllCardsOnBoard)
+                        if (cardTemp.type == Enums.Type.Elemental)
+                            idList.Add(cardTemp.id);
+            }
+             if (targetList.Contains(Enums.Target.Spirit))
+            {
+                if (targetList.Contains(Enums.Target.Ally))
+                    foreach (Card cardTemp in shaman.cardsOnBoard)
+                        if (cardTemp.type == Enums.Type.Spirit)
+                            idList.Add(cardTemp.id);
+                if (targetList.Contains(Enums.Target.Enemy))
+                    foreach (Card cardTemp in opponent.cardsOnBoard)
+                        if (cardTemp.type == Enums.Type.Spirit)
+                            idList.Add(cardTemp.id);
+                if (!targetList.Contains(Enums.Target.Ally) && !targetList.Contains(Enums.Target.Enemy))
+                    foreach (Card cardTemp in AllCardsOnBoard)
+                        if (cardTemp.type == Enums.Type.Spirit)
+                            idList.Add(cardTemp.id);
+            }
+
+
+            return idList;
+        }
+
+        public void SendComm(List<int> idList)
+        {
+            comm.SendValidTargets(idList);
+        } // invia Lista di ID a comm.
+        public static void SendCommTargets(List<int> idTargetsList)
+        {
+            SendCommTargets(idTargetsList);
+        } // questa incapsula SendComm. (accessibilità)
+
+        public void UpdCommElem(Elemental elem) // invia Elementale da aggiornare a comm.
+        {
+            comm.UpdateElemental(elem);
+        }
+        public static void UpdateCommElemental(Elemental elemTemp) // incapsula UpdCommElem. (accessibilità)
+        {
+            UpdateCommElemental(elemTemp);
+        }
+
+        public void UpdCommPlayer(int Id, int hp)
+        {
+            comm.UpdatePlayers(Id, hp);
+        } // invia Player da aggiornare a comm.
+        public static void UpdateCommPlayer (int idPlayer, int hpPlayer)
+        {
+            UpdateCommPlayer(idPlayer, hpPlayer);
+        }// incapsula UpdCommPlayer (accessibilità)
 
         public static Card FindTargetCardByID(int idTemp)
         {

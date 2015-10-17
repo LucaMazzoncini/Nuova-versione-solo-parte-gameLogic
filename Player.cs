@@ -90,11 +90,9 @@ namespace GameLogic
                             {
                                 foreach (string microAct in ElemTemp.onAppear)
                                     validTargets.Add(MicroActions.getTargets(microAct));
-                                MicroActionsProcessor.AcquireValidTargets(validTargets); //stora bersagli.
-                                MicroActionsProcessor.AcquireMicroactions(ElemTemp.onAppear); // stora microazioni.
-                                if (MicroActionsProcessor.canProcessMicroactions()) ; // controlla se le microazioni hanno tutte almeno 1 target valido.
-                                    //MicroActionsProcessor.ProcessMicroactions();
-                                                             
+                                MicroActionsProcessor.AcquireData(ElemTemp.onAppear, validTargets); // stora tutti i dati.
+                                if (MicroActionsProcessor.canProcessMicroactions())// controlla se le microazioni hanno tutte almeno 1 target valido.
+                                    MicroActionsProcessor.ProcessMicroactions(); // Risolve tutte le microazioni in MicroActionProcessor.                             
                             }
                         return ElemTemp;
 
@@ -110,12 +108,18 @@ namespace GameLogic
                         return SpiritTemp;
 
                     case Enums.Type.Ritual:
-                        Ritual ritualTemp = (Ritual)cardTemp; // cast a Ritual
-                        foreach (Power powTemp in ritualTemp.powers)
+                        Ritual RitualTemp = (Ritual)cardTemp; // cast a Ritual
+                        List<string> RitualMicroactions = new List<string>();
+                        foreach (Power powTemp in RitualTemp.powers)
                             foreach (string microAct in powTemp.microActions)
+                            {
                                 validTargets.Insert(0, MicroActions.getTargets(microAct));
-                        //stesso discorso che per gli Elementals.
-                        return ritualTemp;
+                                RitualMicroactions.Add(microAct);
+                            }
+                        MicroActionsProcessor.AcquireData(RitualMicroactions, validTargets); 
+                        if (MicroActionsProcessor.canProcessMicroactions())
+                            MicroActionsProcessor.ProcessMicroactions();
+                        return RitualTemp;
 
                     default:
                         return null;                        
