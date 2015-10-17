@@ -113,6 +113,31 @@ namespace GameLogic
         #endregion
 
         #region Metodi chiamati da Comunicator
+        public void UpdateElemental(Elemental ele)
+        {
+
+            foreach(Elemental eleTemp in shaman.cardsOnBoard)
+            {
+                if(eleTemp.id == ele.id)
+                {
+                    shaman.cardsOnBoard.Remove(eleTemp);
+                    shaman.cardsOnBoard.Insert(0, ele);
+                }
+
+            }
+            foreach (Elemental eleTemp in opponent.cardsOnBoard)
+            {
+                if (eleTemp.id == ele.id)
+                {
+                    opponent.cardsOnBoard.Remove(eleTemp);
+                    opponent.cardsOnBoard.Insert(0, ele);
+                }
+
+            }
+
+
+        }
+
         public void CanAttack(int id)
         {
             foreach (Card cardTemp in shaman.cardsOnBoard)
@@ -126,6 +151,7 @@ namespace GameLogic
 
             //qui va' presa la carta ed aggiunta all'opponent
             opponent.cardsOnBoard.Add(card);
+
             Game.AllCardsOnBoard.Add(card);
             Game.EnemyElementals.Add(card.target); //!!!!!!ATTENTO IL TARGET E' DA VALORIZZARE aggiunge a lista di bersagli validi sul board.
 
@@ -199,6 +225,11 @@ namespace GameLogic
                 comm.sendMana(shaman.mana);  //invio l'update del mana
                                              //Ricordati che ho fatto 3 send mana invece di uno perche' cosi' possiamo fare 3 animazioni distinte in base al mana che viene aggiunto
             }
+
+            if( manaEventparam == Enums.ManaEvent.AddMana)
+            {
+
+            }
         }
 
         public void PlayCard(string name)
@@ -253,7 +284,7 @@ namespace GameLogic
             }
         }
         
-        public static void TargetReturn(int id)
+        public void TargetReturn(int id)
         {
             MicroActionsProcessor.TargetId = id;
         }

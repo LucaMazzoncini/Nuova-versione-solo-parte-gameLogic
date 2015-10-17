@@ -28,7 +28,7 @@ namespace GameLogic
 
         public enum ManaEvent //questo enum definisco per quali eventi puo' essere richiesto il mana
         {
-            None,NewRound
+            None,NewRound,AddMana
         }
 
         public enum Properties
