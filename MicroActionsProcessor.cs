@@ -134,7 +134,7 @@ namespace GameLogic
         {
             List<string> callMicroations = new List<string>(); // come microactions, ma senza .values, solo nome microazione
             char separator = '.';
-            int index = 0;
+            index = 0;
             foreach (string stringTemp in microactions)
             {
                 string[] splitted = stringTemp.ToUpper().Split(separator);
