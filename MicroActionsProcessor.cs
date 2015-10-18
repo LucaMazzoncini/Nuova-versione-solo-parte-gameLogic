@@ -6,15 +6,20 @@ namespace GameLogic
 {
     public static class MicroActionsProcessor
     {
+        public static int index = 0;
         public static List<string> microactions = new List<string>(); // stora la lista di microazioni del Power da processare.
         public static List<List<Enums.Target>> targets = new List<List<Enums.Target>>(); // store tutti i target validi di tutte le microazioni di cui è composto il Power. Se una Microaction è associata ad una lista di target vuota, significa che non richiede target in risoluzione.
         public static List<Dictionary<string, string>> microactionParams = new List<Dictionary<string, string>>(); // store di tutti i Param da spedire alle funzioni di MicroActions.table
         public static int TargetId; // questo ID viene rivalorizzato ogni volta che il giocatore seleziona bersaglio sull'interfaccia.
                                     // Game.SendCommTargets -- innesca una serie di chiamate che alla fine valorizzano TargetId.
+
+        public static void AcquireTarget()// questa invia target validi a comm e aspetta ritorno TargetResult. BASTA. le altre, vengono
+                                          // chiamate dentro Target Result!
+        {
+        }
         public static void AcquireMicroactionsParams()
         {
             char[] separator = new char[] { '.' };
-            int index = 0;
             string[] Split;
             
             if (microactions != null)
