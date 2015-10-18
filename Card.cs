@@ -117,14 +117,6 @@ namespace GameLogic
             return null;
 
         }     
-        public void processMicroaction(List<string> paramList) //questa funzione processa e prepara le microazioni
-        {
-
-            //deve parsare la stringa 
-            foreach (string microaction in paramList) //deve ciclare 
-            {
-                MicroActions.table[microaction](null);
-            }
-        }
+        
     }
 }

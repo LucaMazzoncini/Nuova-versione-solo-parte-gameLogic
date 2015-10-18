@@ -8,5 +8,6 @@ namespace GameLogic
     public class Ritual : Card
     {
         public Ritual(string param) : base(param) { }
+        public Ritual() : base() { }
     }
 }

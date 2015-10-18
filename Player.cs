@@ -180,13 +180,13 @@ namespace GameLogic
                         break;
                     case Enums.Type.Ritual:
 
-                        List<Enums.Target> targetList = new List<Enums.Target>();
+                            List<Enums.Target> targetList = new List<Enums.Target>();
                         foreach (Power powTemp in cardTemp.powers)
                             foreach (string microaction in powTemp.microActions)
                                 foreach (Enums.Target targTemp in MicroActions.getTargets(microaction))
                                     targetList.Add(targTemp);
                         if (targetList != null)
-                            foreach (Enums.Target tTemp in targetList)
+                            foreach (Enums.Target tTemp in targetList) // controlla che ci sia almeno 1 target valido.
                             {
                                 if (tTemp == Enums.Target.Enemy)
                                     if (Game.EnemyElementals.Count == 0)
