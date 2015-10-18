@@ -83,6 +83,9 @@ namespace GameLogic
             card += (" ONDEATH:" + (GetDataFromXml("OnDeath")));
             flavour = GetDataFromXml("Flavour");
             card += (" FLAVOUR:" + (GetDataFromXml("Flavour")));
+            Power_A += GetDataFromXml("Ability1");
+            Power_B += GetDataFromXml("Ability2");
+            Power_C += GetDataFromXml("Ability3");
 
         }
 
