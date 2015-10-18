@@ -22,27 +22,27 @@ namespace GameLogic
         static MicroActions()
         {
             MicroActions.table = new Dictionary<string, Action<Params>>();
-            MicroActions.table.Add("Armor", armor);
-            MicroActions.table.Add("HealArmorElemental", HealArmorElemental);
-            MicroActions.table.Add("Kill", kill);
-            MicroActions.table.Add("Damage", Damage);
-            MicroActions.table.Add("DamageElemental", DamageElemental);
-            MicroActions.table.Add("DamageEnemyElemental", DamageEnemyElemental);
-            MicroActions.table.Add("DamagePoisonElemental", DamagePoisonElemental);
-            MicroActions.table.Add("DamagePlayer", DamagePlayer);
-            MicroActions.table.Add("SelfDamage", SelfDamage);
-            MicroActions.table.Add("Dispel", Dispel);
-            MicroActions.table.Add("AddCos", AddCos);
-            MicroActions.table.Add("DecStr", DecStr);
-            MicroActions.table.Add("Incurable", Incurable);
-            MicroActions.table.Add("Asleep", Asleep);
-            MicroActions.table.Add("Shield", Shield);
-            MicroActions.table.Add("Poison", Poison);
-            MicroActions.table.Add("HealElemental", HealElemental);
-            MicroActions.table.Add("Heal", Heal);
-            MicroActions.table.Add("HealYouAndAllAllies", HealYouAndAllAllies);
-            MicroActions.table.Add("AddMana", AddMana);
-            MicroActions.table.Add("LostRandomElement", LostRandomElement);
+            MicroActions.table.Add("ARMOR", armor);
+            MicroActions.table.Add("HEALARMORELEMENTAL", HealArmorElemental);
+            MicroActions.table.Add("KILL", kill);
+            MicroActions.table.Add("DAMAGE", Damage);
+            MicroActions.table.Add("DAMAGEELEMENTAL", DamageElemental);
+            MicroActions.table.Add("DAMAGEENEMYELEMENTAL", DamageEnemyElemental);
+            MicroActions.table.Add("DAMAGEPOISONELEMENTAL", DamagePoisonElemental);
+            MicroActions.table.Add("DAMAGEPLAYER", DamagePlayer);
+            MicroActions.table.Add("SELFDAMAGE", SelfDamage);
+            MicroActions.table.Add("DISPEL", Dispel);
+            MicroActions.table.Add("ADDCOS", AddCos);
+            MicroActions.table.Add("DECSTR", DecStr);
+            MicroActions.table.Add("INCURABLE", Incurable);
+            MicroActions.table.Add("ASLEEP", Asleep);
+            MicroActions.table.Add("SHIELD", Shield);
+            MicroActions.table.Add("POISON", Poison);
+            MicroActions.table.Add("HEALELEMENTAL", HealElemental);
+            MicroActions.table.Add("HEAL", Heal);
+            MicroActions.table.Add("HEALYOUANDALLALLIES", HealYouAndAllAllies);
+            MicroActions.table.Add("ADDMANA", AddMana);
+            MicroActions.table.Add("LOSTRANDOMELEMENT", LostRandomElement);
         }
 
         //Vanno aggiunti tutti i case delle microazioni

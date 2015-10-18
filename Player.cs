@@ -202,7 +202,9 @@ namespace GameLogic
                                 if (tTemp == Enums.Target.Spirit)
                                     if (Game.EnemySpirits.Count == 0 && Game.AllySpirits.Count == 0)
                                         canPlay = false;
-                            }
+                                if (tTemp == Enums.Target.Elemental)
+                                        if (Game.AllyElementals.Count == 0 && Game.EnemyElementals.Count == 0)
+                            }           canPlay = false;
                         break;
                 }
             }

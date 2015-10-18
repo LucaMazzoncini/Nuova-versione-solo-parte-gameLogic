@@ -40,19 +40,13 @@ namespace GameLogic
                 }
             }               
         }
-        public static List<List<Enums.Target>> AcquireValidTargets(List<List<Enums.Target>> validTargets)
+        public static void AcquireValidTargets(List<List<Enums.Target>> validTargets)
         {
             targets = validTargets;
-            return validTargets;
         }
         public static void AcquireMicroactions(List<string> microActions)
         {
-            char separator = '.';
-            foreach (string stringTemp in microActions)
-            {
-                string[] Splitted = stringTemp.ToUpper().Split(separator);
-                microactions.Add(Splitted[0]);
-            }       
+            microactions = microActions;
         }
         public static bool canProcessMicroactions() // verifica che tutte le microazioni del potere, che richiedano bersaglio, abbiano almeno 1 bersaglio valido.
         {
@@ -131,10 +125,17 @@ namespace GameLogic
         }
         public static void ProcessMicroactions()
         {
+            List<string> callMicroations = new List<string>(); // come microactions, ma senza .values, solo nome microazione
+            char separator = '.';
             int index = 0;
-            while (microactions.Count > 0)
-            {               
-                MicroActions.table[microactions[index]](microactionParams[index]);
+            foreach (string stringTemp in microactions)
+            {
+                string[] splitted = stringTemp.ToUpper().Split(separator);
+                callMicroations.Add(splitted[0]);
+            }
+            while (callMicroations.Count > 0)
+            {                                          
+                MicroActions.table[callMicroations[index]](microactionParams[index]);
                 if (TargetId[index] < 2)
                     Game.UpdateCommPlayers(TargetId[index], Game.FindTargetPlayerById(TargetId[index]).hp); // se il bersaglio era player lo aggiorna.
                 else
@@ -142,7 +143,8 @@ namespace GameLogic
                 TargetId.RemoveAt(index);
                 targets.RemoveAt(index);
                 microactionParams.RemoveAt(index);
-                microactions.RemoveAt(index); // svuota le liste
+                microactions.RemoveAt(index);
+                callMicroations.RemoveAt(index);// svuota le liste
             }
         } 
    }    
