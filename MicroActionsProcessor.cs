@@ -37,6 +37,11 @@ namespace GameLogic
                     {
                         Game.SendCommTargets(Game.FindAllValidTargetsId(targets[index]));// -- invia a comm la lista dei target validi tramite id                           
                     }
+                    else
+                    {
+                        index += 1;
+                        AcquireMicroactionsParams();
+                    }
                 }
             }               
         }

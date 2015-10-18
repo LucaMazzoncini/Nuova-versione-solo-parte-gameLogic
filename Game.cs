@@ -297,7 +297,7 @@ namespace GameLogic
         public void TargetReturn(int id)
         {
             MicroActionsProcessor.TargetId.Add(id); //aggiunge target a TargetId
-            MicroActionsProcessor.microactionParams[MicroActionsProcessor.index].Add("Target", id.ToString()); //aggiunge target alla lista di parametri
+            MicroActionsProcessor.microactionParams[MicroActionsProcessor.index].Add("idTarget", MicroActionsProcessor.TargetId[MicroActionsProcessor.index].ToString()); //aggiunge target alla lista di parametri
             MicroActionsProcessor.index += 1; // incrementa index
             MicroActionsProcessor.AcquireMicroactionsParams(); //callback a AcquireMicroactionsParam.
 

@@ -209,7 +209,8 @@ namespace GameLogic
                         break;
                 }
             }
-            else canPlay = false; //se non puoi pagare torna falso;
+            else
+                    canPlay = false; //se non puoi pagare torna falso;
            
 
             return canPlay;        

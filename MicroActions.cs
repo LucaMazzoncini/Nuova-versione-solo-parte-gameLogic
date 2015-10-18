@@ -300,6 +300,7 @@ namespace GameLogic
             Elemental elemTemp = (Elemental)Game.FindTargetCardByID(idTarget);
             for (int i = 0; i < cosValue; i++)
             {
+                elemTemp.hp += 1;
                 elemTemp.constitution += 1;
                 elemTemp.buff.Add(Enums.Buff.IncreasedCon);
             }
