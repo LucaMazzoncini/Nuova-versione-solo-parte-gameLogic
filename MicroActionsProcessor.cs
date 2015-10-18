@@ -15,7 +15,7 @@ namespace GameLogic
         
         public static void AcquireMicroactionsParams()
         {
-            
+
             if (index < microactions.Count)
             {
                 char[] separator = new char[] { '.' };
@@ -43,7 +43,9 @@ namespace GameLogic
                         AcquireMicroactionsParams();
                     }
                 }
-            }               
+            }
+            else
+                ProcessMicroactions(); // finito di acquisire tutto, comincia a processare.           
         }
         public static void AcquireValidTargets(List<List<Enums.Target>> validTargets)
         {

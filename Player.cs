@@ -93,10 +93,7 @@ namespace GameLogic
                                 MicroActionsProcessor.AcquireMicroactions(ElemTemp.onAppear);
                                 MicroActionsProcessor.AcquireValidTargets(validTargets);
                                 if (MicroActionsProcessor.canProcessMicroactions())// controlla se le microazioni hanno tutte almeno 1 target valido.
-                                {
-                                    MicroActionsProcessor.AcquireMicroactionsParams();
-                                    MicroActionsProcessor.ProcessMicroactions(); // Risolve tutte le microazioni in MicroActionProcessor.       
-                                }                      
+                                    MicroActionsProcessor.AcquireMicroactionsParams();    
                             }
                         return ElemTemp;
 
@@ -123,10 +120,8 @@ namespace GameLogic
                         MicroActionsProcessor.AcquireValidTargets(validTargets);
                         MicroActionsProcessor.AcquireMicroactions(RitualMicroactions);
                         if (MicroActionsProcessor.canProcessMicroactions())
-                        {
                             MicroActionsProcessor.AcquireMicroactionsParams();
-                            MicroActionsProcessor.ProcessMicroactions();
-                        }
+                       
                         return RitualTemp;
 
                     default:
