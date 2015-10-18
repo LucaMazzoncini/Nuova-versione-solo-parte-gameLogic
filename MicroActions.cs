@@ -23,9 +23,12 @@ namespace GameLogic
         {
             MicroActions.table = new Dictionary<string, Action<Params>>();
             MicroActions.table.Add("Armor", armor);
+            MicroActions.table.Add("HealArmorElemental", HealArmorElemental);
             MicroActions.table.Add("Kill", kill);
             MicroActions.table.Add("Damage", Damage);
             MicroActions.table.Add("DamageElemental", DamageElemental);
+            MicroActions.table.Add("DamageEnemyElemental", DamageEnemyElemental);
+            MicroActions.table.Add("DamagePoisonElemental", DamagePoisonElemental);
             MicroActions.table.Add("DamagePlayer", DamagePlayer);
             MicroActions.table.Add("SelfDamage", SelfDamage);
             MicroActions.table.Add("Dispel", Dispel);
@@ -54,6 +57,13 @@ namespace GameLogic
                     targetsList.Add(Enums.Target.Elemental);
                     break;
                 case "DAMAGEELEMENTAL":
+                    targetsList.Add(Enums.Target.Elemental);
+                    break;
+                case "DAMAGEENEMYELEMENTAL":
+                    targetsList.Add(Enums.Target.Elemental);
+                    targetsList.Add(Enums.Target.Enemy);
+                    break;
+                case "DAMAGEPOISONELEMENTAL":
                     targetsList.Add(Enums.Target.Elemental);
                     break;
                 case "DAMAGEPLAYER":
@@ -94,6 +104,9 @@ namespace GameLogic
                 case "HEALELEMENTAL":
                     targetsList.Add(Enums.Target.Elemental);
                     break;
+                case "HEALARMORELEMENTAL":
+                    targetsList.Add(Enums.Target.Elemental);
+                    break;
                 case "HEALYOUANDALLALLIES": 
                     
                     break;
@@ -101,7 +114,7 @@ namespace GameLogic
                     targetsList.Add(Enums.Target.Player);
                     break;
                 case "LOSTRANDOMELEMENT":
-                    targetsList.Add(Enums.Target.Player);
+                    
                     break;
                 case "ASLEEP":
                     targetsList.Add(Enums.Target.Elemental);
@@ -136,11 +149,11 @@ namespace GameLogic
 
         private static void armor(Params param)
         {
-            //qui dentro vanno parsati i parametri
-
-            //il target gia' si deve avere prima di chiamare questa
-            // target = param["target"]
-            int armorValue = Int32.Parse(param["Value"]);
+            int armorValue;
+            if (param.ContainsKey("Value2"))
+                armorValue = Int32.Parse(param["Value2"]);
+            else
+                armorValue = Int32.Parse(param["Value"]);
             int idCard = Int32.Parse(param["idTarget"]);
             Card cTemp = Game.FindTargetCardByID(idCard);
             if (cTemp.GetType() == typeof(Elemental))
@@ -150,7 +163,7 @@ namespace GameLogic
                     elemTemp.properties.Add(Enums.Properties.Armor);
             }
 
-            // Send to communicator
+            
         }
         private static void kill(Params param)
         {
@@ -226,6 +239,15 @@ namespace GameLogic
                     break;
                 }
             }
+        }
+        private static void DamageEnemyElemental(Params param)
+        {
+            DamageElemental(param);
+        }
+        private static void DamagePoisonElemental(Params param)
+        {
+            DamageElemental(param);
+            Poison(param);
         }
         private static void DamagePlayer(Params param)
         {
@@ -359,6 +381,11 @@ namespace GameLogic
                             elemTemp.hp += 1;
             }
         }
+        private static void HealArmorElemental(Params param)
+        {
+            HealElemental(param);
+            armor(param);
+        }
         private static void Heal(Params param)
         {
             int healValue = Int32.Parse(param["Value"]);
@@ -412,8 +439,8 @@ namespace GameLogic
         }
         private static void LostRandomElement(Params param)
         {
-            int idTarget = Int32.Parse(param["idTarget"]);
-            Player playerTemp = Game.FindTargetPlayerById(idTarget);
+            
+            Player playerTemp = Game.FindTargetPlayerById(1);
             Random random = new Random();
             Boolean lost = false;
             do

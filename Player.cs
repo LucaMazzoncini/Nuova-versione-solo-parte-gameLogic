@@ -90,9 +90,11 @@ namespace GameLogic
                             {
                                 foreach (string microAct in ElemTemp.onAppear)
                                     validTargets.Add(MicroActions.getTargets(microAct));
-                                MicroActionsProcessor.AcquireData(ElemTemp.onAppear, validTargets); // stora tutti i dati.
                                 if (MicroActionsProcessor.canProcessMicroactions())// controlla se le microazioni hanno tutte almeno 1 target valido.
-                                    MicroActionsProcessor.ProcessMicroactions(); // Risolve tutte le microazioni in MicroActionProcessor.                             
+                                {
+                                    MicroActionsProcessor.AcquireData(ElemTemp.onAppear, validTargets); // stora tutti i dati e chiede i target alla UI.
+                                    MicroActionsProcessor.ProcessMicroactions(); // Risolve tutte le microazioni in MicroActionProcessor.       
+                                }                      
                             }
                         return ElemTemp;
 
@@ -116,9 +118,11 @@ namespace GameLogic
                                 validTargets.Insert(0, MicroActions.getTargets(microAct));
                                 RitualMicroactions.Add(microAct);
                             }
-                        MicroActionsProcessor.AcquireData(RitualMicroactions, validTargets); 
                         if (MicroActionsProcessor.canProcessMicroactions())
+                        {
+                            MicroActionsProcessor.AcquireData(RitualMicroactions, validTargets);
                             MicroActionsProcessor.ProcessMicroactions();
+                        }
                         return RitualTemp;
 
                     default:
@@ -164,9 +168,6 @@ namespace GameLogic
                                     if (cTemp.name == elemCard.from)
                                         canPlay = true;                                        
                             }
-
-
-
                         }
                         else
                             canPlay = false;

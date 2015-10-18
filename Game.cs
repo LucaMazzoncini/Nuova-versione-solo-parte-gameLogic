@@ -296,7 +296,11 @@ namespace GameLogic
         
         public void TargetReturn(int id)
         {
-            MicroActionsProcessor.TargetId = id;
+            MicroActionsProcessor.TargetId.Add(id); //aggiunge target a TargetId
+            MicroActionsProcessor.microactionParams[MicroActionsProcessor.index].Add("Target", id.ToString()); //aggiunge target alla lista di parametri
+            MicroActionsProcessor.index += 1; // incrementa index
+            MicroActionsProcessor.AcquireMicroactionsParams(); //callback a AcquireMicroactionsParam.
+
         }
 
         public void GetValidAttackableTarget(int idAttacker)
@@ -388,14 +392,10 @@ namespace GameLogic
             Game.getInstance().comm.UpdateElemental(elemTemp);
         }
 
-        public void UpdCommPlayer(int Id, int hp)
+        public static void UpdateCommPlayers (int idPlayer, int hpPlayer)
         {
-            comm.UpdatePlayers(Id, hp);
-        } // invia Player da aggiornare a comm.
-        public static void UpdateCommPlayer (int idPlayer, int hpPlayer)
-        {
-            UpdateCommPlayer(idPlayer, hpPlayer);
-        }// incapsula UpdCommPlayer (accessibilità)
+            Game.getInstance().comm.UpdatePlayers(idPlayer, hpPlayer);
+        }
 
         public static Card FindTargetCardByID(int idTemp)
         {
