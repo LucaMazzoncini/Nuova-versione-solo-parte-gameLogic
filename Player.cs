@@ -190,21 +190,22 @@ namespace GameLogic
                             foreach (string microaction in powTemp.microActions)
                                 foreach (Enums.Target targTemp in MicroActions.getTargets(microaction))
                                     targetList.Add(targTemp);
-                        if (targetList != null)
-                            foreach (Enums.Target tTemp in targetList) // controlla che ci sia almeno 1 target valido.
-                            {
-                                if (tTemp == Enums.Target.Enemy)
-                                    if (Game.EnemyElementals.Count == 0)
-                                        canPlay = false;
-                                if (tTemp == Enums.Target.Ally)
-                                    if (Game.AllyElementals.Count == 0)
-                                        canPlay = false;
-                                if (tTemp == Enums.Target.Spirit)
-                                    if (Game.EnemySpirits.Count == 0 && Game.AllySpirits.Count == 0)
-                                        canPlay = false;
-                                if (tTemp == Enums.Target.Elemental)
+                            if (targetList != null)
+                                foreach (Enums.Target tTemp in targetList) // controlla che ci sia almeno 1 target valido.
+                                {
+                                    if (tTemp == Enums.Target.Enemy)
+                                        if (Game.EnemyElementals.Count == 0)
+                                            canPlay = false;
+                                    if (tTemp == Enums.Target.Ally)
+                                        if (Game.AllyElementals.Count == 0)
+                                            canPlay = false;
+                                    if (tTemp == Enums.Target.Spirit)
+                                        if (Game.EnemySpirits.Count == 0 && Game.AllySpirits.Count == 0)
+                                            canPlay = false;
+                                    if (tTemp == Enums.Target.Elemental)
                                         if (Game.AllyElementals.Count == 0 && Game.EnemyElementals.Count == 0)
-                            }           canPlay = false;
+                                            canPlay = false;
+                                }
                         break;
                 }
             }
