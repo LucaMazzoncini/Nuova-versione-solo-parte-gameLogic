@@ -50,12 +50,6 @@ namespace GameLogic
             microactions = microActions;
             return microActions;
         }
-        public static void AcquireData(List<string> micrAct, List<List<Enums.Target>> targ)
-        {
-            AcquireMicroactions(micrAct);
-            AcquireValidTargets(targ);
-            AcquireMicroactionsParams();
-        }
         public static bool canProcessMicroactions() // verifica che tutte le microazioni del potere, che richiedano bersaglio, abbiano almeno 1 bersaglio valido.
         {
             bool canProcess = false;

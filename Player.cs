@@ -90,9 +90,11 @@ namespace GameLogic
                             {
                                 foreach (string microAct in ElemTemp.onAppear)
                                     validTargets.Add(MicroActions.getTargets(microAct));
+                                MicroActionsProcessor.AcquireMicroactions(ElemTemp.onAppear);
+                                MicroActionsProcessor.AcquireValidTargets(validTargets);
                                 if (MicroActionsProcessor.canProcessMicroactions())// controlla se le microazioni hanno tutte almeno 1 target valido.
                                 {
-                                    MicroActionsProcessor.AcquireData(ElemTemp.onAppear, validTargets); // stora tutti i dati e chiede i target alla UI.
+                                    MicroActionsProcessor.AcquireMicroactionsParams();
                                     MicroActionsProcessor.ProcessMicroactions(); // Risolve tutte le microazioni in MicroActionProcessor.       
                                 }                      
                             }
@@ -118,9 +120,11 @@ namespace GameLogic
                                 validTargets.Insert(0, MicroActions.getTargets(microAct));
                                 RitualMicroactions.Add(microAct);
                             }
+                        MicroActionsProcessor.AcquireValidTargets(validTargets);
+                        MicroActionsProcessor.AcquireMicroactions(RitualMicroactions);
                         if (MicroActionsProcessor.canProcessMicroactions())
                         {
-                            MicroActionsProcessor.AcquireData(RitualMicroactions, validTargets);
+                            MicroActionsProcessor.AcquireMicroactionsParams();
                             MicroActionsProcessor.ProcessMicroactions();
                         }
                         return RitualTemp;
