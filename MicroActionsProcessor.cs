@@ -45,10 +45,14 @@ namespace GameLogic
             targets = validTargets;
             return validTargets;
         }
-        public static List<string> AcquireMicroactions(List<string> microActions)
+        public static void AcquireMicroactions(List<string> microActions)
         {
-            microactions = microActions;
-            return microActions;
+            char separator = '.';
+            foreach (string stringTemp in microActions)
+            {
+                string[] Splitted = stringTemp.ToUpper().Split(separator);
+                microactions.Add(Splitted[0]);
+            }       
         }
         public static bool canProcessMicroactions() // verifica che tutte le microazioni del potere, che richiedano bersaglio, abbiano almeno 1 bersaglio valido.
         {
