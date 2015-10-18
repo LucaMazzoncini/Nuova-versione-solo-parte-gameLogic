@@ -180,7 +180,7 @@ namespace GameLogic
                         break;
                     case Enums.Type.Ritual:
 
-                        List<Enums.Target> targetList = null;
+                        List<Enums.Target> targetList = new List<Enums.Target>();
                         foreach (Power powTemp in cardTemp.powers)
                             foreach (string microaction in powTemp.microActions)
                                 foreach (Enums.Target targTemp in MicroActions.getTargets(microaction))

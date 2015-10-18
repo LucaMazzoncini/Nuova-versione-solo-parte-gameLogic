@@ -31,8 +31,18 @@ namespace GameLogic
         public static List<Enums.Target> AllySpirits = new List<Enums.Target>();
         public static List<Enums.Target> EnemySpirits = new List<Enums.Target>();
         public static List<Card> AllCardsOnBoard = new List<Card>();
-        
-        
+
+        private static Game _instance = null;
+
+        public static void init(string name)
+        {
+            _instance = new Game(name);
+        }
+
+        public static Game getInstance()
+        {
+            return _instance; // This may return null if not initialized
+        }
 
         #endregion
         public Game(string name)
@@ -367,22 +377,15 @@ namespace GameLogic
             return idList;
         }
 
-        public void SendComm(List<int> idList)
-        {
-            comm.SendValidTargets(idList);
-        } // invia Lista di ID a comm.
+
         public static void SendCommTargets(List<int> idTargetsList)
         {
-            SendCommTargets(idTargetsList);
-        } // questa incapsula SendComm. (accessibilità)
+            Game.getInstance().comm.SendValidTargets(idTargetsList);      
+        } 
 
-        public void UpdCommElem(Elemental elem) // invia Elementale da aggiornare a comm.
-        {
-            comm.UpdateElemental(elem);
-        }
         public static void UpdateCommElemental(Elemental elemTemp) // incapsula UpdCommElem. (accessibilità)
         {
-            UpdateCommElemental(elemTemp);
+            Game.getInstance().comm.UpdateElemental(elemTemp);
         }
 
         public void UpdCommPlayer(int Id, int hp)

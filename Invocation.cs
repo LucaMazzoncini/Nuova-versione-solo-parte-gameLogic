@@ -233,22 +233,25 @@ namespace GameLogic
             Power temp = null;
             foreach (string prop in propertiesArray)
             {
-                if( prop.Contains("COOLDOWN."))
+                if (prop.Contains("COOLDOWN."))
                 {
-                    if(temp != null)
-                        list.Add(temp);
+                    if (temp == null)
+                    {
                         temp = new Power();
                         string[] tmpStr = prop.Split('.');
                         temp.cooldown = Int32.Parse(tmpStr[1]);
+                    }
                 }
                 else
-                if(temp != null)
                 {
+                    if (temp == null)
+                        temp = new Power();
                     temp.microActions.Add(prop); //aggiungo le proprietà del potere
-                }          
-            }
+                }
+          }
             if (temp != null)
-                list.Add(temp); //inserisco l'ultimo processato che altrimenti andrebbe perso
+
+                list.Add(temp); //inserisco l'ultimo processato che altrimenti andrebbe perso  
             return list;
         }
 

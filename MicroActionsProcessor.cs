@@ -20,10 +20,15 @@ namespace GameLogic
             if (microactions != null)
             do
             {
-                Split = microactions[index].ToUpper().Split(separator);
-                if (!Split[0].Equals("COOLDOWN"))
-                    if (Split.Length > 1)
-                        microactionParams[index].Add("Value", Split[1]);
+                    Dictionary<string, string> dictTemp = new Dictionary<string, string>();
+                    microactionParams.Add(dictTemp);
+                    Split = microactions[index].ToUpper().Split(separator);
+                    if (!Split[0].Equals("COOLDOWN"))
+                        if (Split.Length > 1)
+                        {
+
+                            microactionParams[index].Add("Value", Split[1]);
+                        }
                     if (targets[index].Count > 0)
                         {
                             Game.SendCommTargets(Game.FindAllValidTargetsId(targets[index]));// -- invia a comm la lista dei target validi tramite id                           
