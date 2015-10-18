@@ -114,7 +114,7 @@ namespace GameLogic
                         foreach (Power powTemp in RitualTemp.powers)
                             foreach (string microAct in powTemp.microActions)
                             {
-                                validTargets.Insert(0, MicroActions.getTargets(microAct));
+                                validTargets.Add(MicroActions.getTargets(microAct));
                                 RitualMicroactions.Add(microAct);
                             }
                         MicroActionsProcessor.AcquireValidTargets(validTargets);
