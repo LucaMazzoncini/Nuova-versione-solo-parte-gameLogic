@@ -90,7 +90,8 @@ namespace GameLogic
                             {
                                 foreach (string microAct in ElemTemp.onAppear)
                                     validTargets.Add(MicroActions.getTargets(microAct));
-                                MicroActionsProcessor.AcquireMicroactions(ElemTemp.onAppear);
+                                List<string> micActProva = new List<string>(ElemTemp.onAppear);
+                                MicroActionsProcessor.AcquireMicroactions(micActProva);
                                 MicroActionsProcessor.AcquireValidTargets(validTargets);
                                 if (MicroActionsProcessor.canProcessMicroactions())// controlla se le microazioni hanno tutte almeno 1 target valido.
                                     MicroActionsProcessor.AcquireMicroactionsParams();    
@@ -186,6 +187,7 @@ namespace GameLogic
                                 foreach (Enums.Target targTemp in MicroActions.getTargets(microaction))
                                     targetList.Add(targTemp);
                             if (targetList != null)
+                                if (!targetList.Contains(Enums.Target.None))
                                 foreach (Enums.Target tTemp in targetList) // controlla che ci sia almeno 1 target valido.
                                 {
                                     if (tTemp == Enums.Target.Enemy)

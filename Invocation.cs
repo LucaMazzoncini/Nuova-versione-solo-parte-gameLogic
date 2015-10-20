@@ -78,7 +78,7 @@ namespace GameLogic
             powers = LoadPowersFromString(GetDataFromXml("Powers"));
             card += (" POWERS:" + (GetDataFromXml("Powers")));
             onAppear = LoadActionsAndEffectFromString(GetDataFromXml("OnAppear"));
-            card += (" ONAPPEARACTIONS:" + (GetDataFromXml("OnAppear")));
+            card += (" ONAPPEAR:" + (GetDataFromXml("OnAppear")));
             onDeath = LoadActionsAndEffectFromString(GetDataFromXml("OnDeath"));
             card += (" ONDEATH:" + (GetDataFromXml("OnDeath")));
             flavour = GetDataFromXml("Flavour");

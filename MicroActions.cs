@@ -80,7 +80,8 @@ namespace GameLogic
                     targetsList.Add(Enums.Target.Elemental);
                     break;
                 case "SELFDAMAGE":
-                    
+                    targetsList.Add(Enums.Target.None);
+                    targetsList.Add(Enums.Target.Self);
                     break;
                 case "DECSTR":
                     targetsList.Add(Enums.Target.Elemental);
@@ -107,14 +108,17 @@ namespace GameLogic
                 case "HEALARMORELEMENTAL":
                     targetsList.Add(Enums.Target.Elemental);
                     break;
-                case "HEALYOUANDALLALLIES": 
-                    
+                case "HEALYOUANDALLALLIES":
+                    targetsList.Add(Enums.Target.None);
+                    targetsList.Add(Enums.Target.Self);
+                    targetsList.Add(Enums.Target.AllAllies);
                     break;
                 case "ADDMANA":
                     targetsList.Add(Enums.Target.Player);
                     break;
                 case "LOSTRANDOMELEMENT":
-                    
+                    targetsList.Add(Enums.Target.None);
+                    targetsList.Add(Enums.Target.Opponent);
                     break;
                 case "ASLEEP":
                     targetsList.Add(Enums.Target.Elemental);
@@ -251,11 +255,14 @@ namespace GameLogic
         }
         private static void DamagePlayer(Params param)
         {
+            
             int damageValue = Int32.Parse(param["Value"]);
             int idTarget = Int32.Parse(param["idTarget"]);
-            Player playerTemp = Game.FindTargetPlayerById(idTarget);
+            Player playerTemp;
+            
+            playerTemp = Game.FindTargetPlayerById(idTarget);
             playerTemp.hp -= damageValue;
-
+            
         }
         private static void SelfDamage(Params param)
         {

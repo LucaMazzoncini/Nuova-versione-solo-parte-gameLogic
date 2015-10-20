@@ -55,37 +55,37 @@ namespace GameLogic
             if (InvTemp.type[0] == Enums.Type.Elemental)
             {
                 Elemental card = new Elemental(InvTemp.name);
-                card.name = InvTemp.name;
-                card.manaCost = InvTemp.manaCost;
+                card.name = (string)InvTemp.name.Clone();
+                card.manaCost = new Dictionary<Enums.Mana, int>(InvTemp.manaCost);
                 card.type = InvTemp.type[0];
                 card.subtype = InvTemp.subType[0];
-                card.powers = InvTemp.powers;
+                card.powers = new List<Power>(InvTemp.powers);
                 card.castLimit = InvTemp.castLimit;
-                card.card = InvTemp.getCard();
+                card.card = (string)InvTemp.getCard().Clone();
 
                 card.strength = InvTemp.strength;
                 card.constitution = InvTemp.constitution;
                 card.hp = card.constitution;
                 card.rank = InvTemp.rank;
                 if (card.rank > 0)
-                    card.from = InvTemp.from;
+                    card.from = (string)InvTemp.from.Clone();
                 card.role = InvTemp.role;
-                card.properties = InvTemp.properties;
-                card.onAppear = InvTemp.onAppear;
-                card.onDeath = InvTemp.onDeath;
+                card.properties = new List<Enums.Properties> (InvTemp.properties);
+                card.onAppear = new List<string> (InvTemp.onAppear);
+                card.onDeath = new List<string> (InvTemp.onDeath);
                 return card;
             }
 
             if (InvTemp.type[0] == Enums.Type.Ritual)
             {
                 Ritual card = new Ritual(InvTemp.name);
-                card.name = InvTemp.name;
-                card.manaCost = InvTemp.manaCost;
+                card.name = (string)InvTemp.name.Clone();
+                card.manaCost = new Dictionary<Enums.Mana, int> (InvTemp.manaCost);
                 card.type = InvTemp.type[0];
                 card.subtype = InvTemp.subType[0];
-                card.powers = InvTemp.powers;
+                card.powers = new List<Power> (InvTemp.powers);
                 card.castLimit = InvTemp.castLimit;
-                card.card = InvTemp.getCard();
+                card.card = (string)InvTemp.getCard().Clone();
 
                 return card;
             }
@@ -93,24 +93,24 @@ namespace GameLogic
             if (InvTemp.type[0] == Enums.Type.Spirit)
             {
                Spirit card = new Spirit(InvTemp.name);
-                card.name = InvTemp.name;
-                card.manaCost = InvTemp.manaCost;
+                card.name = (string)InvTemp.name.Clone();
+                card.manaCost = new Dictionary<Enums.Mana, int>(InvTemp.manaCost);
                 card.type = InvTemp.type[0];
                 card.subtype = InvTemp.subType[0];
-                card.powers = InvTemp.powers;
+                card.powers = new List<Power> (InvTemp.powers);
                 card.castLimit = InvTemp.castLimit;
-                card.card = InvTemp.getCard();
+                card.card = (string)InvTemp.getCard().Clone();
                 Spirit SpiritTemp = new Spirit(this.name);
-                SpiritTemp.name = InvTemp.name;
-                SpiritTemp.manaCost = InvTemp.manaCost;
+                SpiritTemp.name = (string)InvTemp.name.Clone();
+                SpiritTemp.manaCost =new Dictionary<Enums.Mana, int> (InvTemp.manaCost);
                 SpiritTemp.type = InvTemp.type[0];
                 SpiritTemp.subtype = InvTemp.subType[0];
-                SpiritTemp.powers = InvTemp.powers;
+                SpiritTemp.powers =new List<Power> (InvTemp.powers);
                 SpiritTemp.castLimit = InvTemp.castLimit;
                 SpiritTemp.card = InvTemp.getCard();
                 SpiritTemp.essence = InvTemp.essence;
-                SpiritTemp.onAppear = InvTemp.onAppear;
-                SpiritTemp.onDeath = InvTemp.onDeath;
+                SpiritTemp.onAppear = new List<string> (InvTemp.onAppear);
+                SpiritTemp.onDeath =new List<string> (InvTemp.onDeath);
                 return card;
             }
 

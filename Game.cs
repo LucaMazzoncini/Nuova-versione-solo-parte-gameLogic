@@ -246,7 +246,8 @@ namespace GameLogic
         {
             if (CanPlayCard(name))
             {
-                Card playedCard = shaman.PlayCard(bibliotheca.getCardByName(name));
+                Card playedCard = bibliotheca.getCardByName(name);
+                shaman.PlayCard(playedCard);
                 comm.sendMana(shaman.mana);
                 if (playedCard.type != Enums.Type.Elemental)
                     comm.SendPlayedCard(playedCard);
@@ -295,12 +296,31 @@ namespace GameLogic
         }
         
         public void TargetReturn(int id)
-        {
-            MicroActionsProcessor.TargetId.Add(id); //aggiunge target a TargetId
-            MicroActionsProcessor.microactionParams[MicroActionsProcessor.index].Add("idTarget", MicroActionsProcessor.TargetId[MicroActionsProcessor.index].ToString()); //aggiunge target alla lista di parametri
-            MicroActionsProcessor.index += 1; // incrementa index
+        { 
+           
+            MicroActionsProcessor.microactionParams.Add("idTarget", id.ToString()); //aggiunge target alla lista di parametri
+            char separator = '.';
+            string[] splitted = MicroActionsProcessor.microactions[MicroActionsProcessor.index].ToUpper().Split(separator);
+            string MicroActionName = splitted[0];
+            // qui chiama la MicroAzione e aggiorna i bersagli.
+            
+            MicroActions.table[MicroActionName](MicroActionsProcessor.microactionParams); // CHIAMATA
+           
+            if (id == 0 || id == 1)
+              Game.UpdateCommPlayers(id, Game.FindTargetPlayerById(id).hp); // se il bersaglio era player lo aggiorna.
+          
+            if (id > 1)
+                Game.UpdateCommElemental((Elemental)Game.FindTargetCardByID(id)); // se il bersaglio era elementale lo aggiorna.
+              
+            //MicroActionsProcessor.index += 1; // incrementa index
+            MicroActionsProcessor.microactions.RemoveAt(MicroActionsProcessor.index); // svuota la posizione [0] di tutte le liste.
+           
+            MicroActionsProcessor.targets.RemoveAt(MicroActionsProcessor.index);
+        
+            MicroActionsProcessor.microactionParams.Clear();
+         
             MicroActionsProcessor.AcquireMicroactionsParams(); //callback a AcquireMicroactionsParam.
-
+            
         }
 
         public void GetValidAttackableTarget(int idAttacker)
