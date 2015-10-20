@@ -333,6 +333,11 @@ namespace GameLogic
             }
         }
 
+        public void OpponentHpUpdate(int hp)
+        {
+            shaman.hp = hp;
+        }
+
         public static List<int> FindAllValidTargetsId(List<Enums.Target> targetList) // gli passi una lista di tipi di bersagli validi e ti ritorna la lista degli ID dei bersagli effettivamente validi.
         {
             List<int> idList = new List<int>();
