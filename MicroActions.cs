@@ -130,7 +130,7 @@ namespace GameLogic
                     targetsList.Add(Enums.Target.AllAllies);
                     break;
                 case "ADDMANA":
-                    targetsList.Add(Enums.Target.Player);
+                    targetsList.Add(Enums.Target.None);
                     break;
                 case "LOSTRANDOMELEMENT":
                     targetsList.Add(Enums.Target.None);
@@ -456,12 +456,11 @@ namespace GameLogic
         {
             int manaValue = Int32.Parse(param["Value"]);
             Enums.Mana manaType = (Enums.Mana)Enum.Parse(typeof(Enums.Mana), param["Mana"], true);
-            int idTarget = Int32.Parse(param["idTarget"]);
-            Player playerTemp = Game.FindTargetPlayerById(idTarget);
-            Dictionary<Enums.Mana, int> manaAdd = new Dictionary<Enums.Mana, int>();
-            manaAdd.Add(manaType, manaValue);
-            playerTemp.mana.AddMana(manaAdd);
-
+          
+            Player playerTemp = Game.FindTargetPlayerById(0);
+            Dictionary<Enums.Mana, int> manaToAdd = new Dictionary<Enums.Mana, int>();
+            manaToAdd.Add(manaType, manaValue);
+            playerTemp.mana.AddMana(manaToAdd);
         }
         private static void LostRandomElement(Params param)
         {

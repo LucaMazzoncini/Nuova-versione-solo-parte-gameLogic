@@ -6,6 +6,7 @@ namespace GameLogic
 {
     public static class MicroActionsProcessor
     {
+        public static Communication.Communicator comm;
         public static int index = 0;
         public static List<string> microactions = new List<string>(); // stora la lista di microazioni del Power da processare.
         public static List<List<Enums.Target>> targets = new List<List<Enums.Target>>(); // store tutti i target validi di tutte le microazioni di cui è composto il Power. Se una Microaction è associata ad una lista di target vuota, significa che non richiede target in risoluzione.
@@ -13,7 +14,7 @@ namespace GameLogic
         //public static List<int> TargetId = new List<int>();
 
         
-        public static void AcquireMicroactionsParams()
+        public static object AcquireMicroactionsParams()
         {
 
             if (index < microactions.Count)
@@ -34,39 +35,36 @@ namespace GameLogic
 
                     if (!targets[index].Contains(Enums.Target.None)) // se ha un bersaglio lo chiede.
                     {
-                        Game.SendCommTargets(Game.FindAllValidTargetsId(targets[index]));// -- invia a comm la lista dei target validi tramite id                           
+                        Game.SendCommTargets(Game.FindAllValidTargetsId(targets[index]));// -- invia a comm la lista dei target validi tramite id  
+                                          
                     }
                     else // se NON ha un bersaglio da scegliere.
                     {
-                        int id = -5;
-                        if (targets[index].Contains(Enums.Target.Self))
-                            id = -1; // aggiorna solo shaman.
-                        if (targets[index].Contains(Enums.Target.Opponent))
-                            id = -2; // aggiorna solo opponent.
-                        if (targets[index].Contains(Enums.Target.AllAllies))
-                            id = -3; // aggiorna tutti elementali ally.
-                        if (targets[index].Contains(Enums.Target.AllEnemies))
-                            id = -4; // aggiorna tutti elementali enemy.
-
                         // qui esegue Microazione e aggiorna bersagli
 
                         char sep = '.';
                         string[] splitted = microactions[index].ToUpper().Split(sep);
                         string MicroActionName = splitted[0];
+                        if (Split[0] == "ADDMANA")
+                        {
+                            comm = Communication.Communicator.getInstance();
+                            comm.ChoseMana(Enums.ManaEvent.AddMana);
+                            return null;
+                        }
                         MicroActions.table[MicroActionName](microactionParams); // CHIAMATA
 
-                        if (id == -1) // aggiorna shaman.
+                        if (targets[index].Contains(Enums.Target.Self)) // aggiorna shaman.
                             Game.UpdateCommPlayers(0, Game.FindTargetPlayerById(0).hp);
-                        if (id == -2) // aggiorna opponent.
+                        if (targets[index].Contains(Enums.Target.Opponent)) // aggiorna opponent.
                             Game.UpdateCommPlayers(1, Game.FindTargetPlayerById(1).hp);
-                        if (id == -3) // aggiorna All Allies.
-                        {
+                        if(targets[index].Contains(Enums.Target.AllAllies)) // aggiorna All Allies.
+                            {
                             if (Game.FindTargetPlayerById(0).cardsOnBoard != null)
                                 foreach (Card cardTemp in Game.FindTargetPlayerById(0).cardsOnBoard)
                                     if (cardTemp.type == Enums.Type.Elemental)
                                         Game.UpdateCommElemental((Elemental)cardTemp);
                         }
-                        if (id == -4) // aggiorna All Enemies.
+                        if (targets[index].Contains(Enums.Target.AllEnemies)) // aggiorna All Enemies.
                         {
                             if (Game.FindTargetPlayerById(1).cardsOnBoard != null)
                                 foreach (Card cardTemp in Game.FindTargetPlayerById(1).cardsOnBoard)
@@ -74,16 +72,15 @@ namespace GameLogic
                                         Game.UpdateCommElemental((Elemental)cardTemp);
                         }
 
-                        MicroActionsProcessor.microactions.RemoveAt(index); // svuota la posizione [0] di tutte le liste.
-                        MicroActionsProcessor.targets.RemoveAt(index);
-                        MicroActionsProcessor.microactionParams.Clear();
+                        microactions.RemoveAt(index); // svuota la posizione [0] di tutte le liste.
+                        targets.RemoveAt(index);
+                        microactionParams.Clear();
                         //index += 1;
                         AcquireMicroactionsParams();
                     }
                 }
             }
-            //else
-                //ProcessMicroactions(); // finito di acquisire tutto, comincia a processare.           
+            return null;          
         }
         public static void AcquireValidTargets(List<List<Enums.Target>> validTargets)
         {
@@ -168,50 +165,6 @@ namespace GameLogic
                 canProcess = true;
             return canProcess;
         }
-       /* public static void ProcessMicroactions()
-        {
-            List<string> callMicroations = new List<string>(); // come microactions, ma senza .values, solo nome microazione
-            char separator = '.';
-            index = 0;
-            foreach (string stringTemp in microactions)
-            {
-                string[] splitted = stringTemp.ToUpper().Split(separator);
-                callMicroations.Add(splitted[0]);
-            }
-            while (callMicroations.Count > 0)
-            {                                          
-                MicroActions.table[callMicroations[index]](microactionParams[index]);
-                if (TargetId[index] == 0 || TargetId[index] == 1)
-                    Game.UpdateCommPlayers(TargetId[index], Game.FindTargetPlayerById(TargetId[index]).hp); // se il bersaglio era player lo aggiorna.
-                if(TargetId[index] > 1)
-                    Game.UpdateCommElemental((Elemental)Game.FindTargetCardByID(TargetId[index])); // se il bersaglio era elementale lo aggiorna.
-                if (TargetId[index] == -1) // aggiorna shaman.
-                    Game.UpdateCommPlayers(0, Game.FindTargetPlayerById(0).hp);
-                if (TargetId[index] == -2) // aggiorna opponent.
-                    Game.UpdateCommPlayers(1, Game.FindTargetPlayerById(1).hp);
-                if (TargetId[index] == -3) // aggiorna All Allies.
-                {
-                    if (Game.FindTargetPlayerById(0).cardsOnBoard != null)
-                        foreach (Card cardTemp in Game.FindTargetPlayerById(0).cardsOnBoard)
-                            if (cardTemp.type == Enums.Type.Elemental)
-                                Game.UpdateCommElemental((Elemental)cardTemp);
-                }
-                if (TargetId[index] == -4) // aggiorna All Enemies.
-                {
-                    if (Game.FindTargetPlayerById(1).cardsOnBoard != null)
-                        foreach (Card cardTemp in Game.FindTargetPlayerById(1).cardsOnBoard)
-                            if (cardTemp.type == Enums.Type.Elemental)
-                                Game.UpdateCommElemental((Elemental)cardTemp);
-                }
-
-
-
-                TargetId.RemoveAt(index);
-                targets.RemoveAt(index);
-                microactionParams.RemoveAt(index);
-                microactions.RemoveAt(index);
-                callMicroations.RemoveAt(index);// svuota le liste
-            } */
     } 
 }    
 

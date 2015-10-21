@@ -238,7 +238,24 @@ namespace GameLogic
 
             if( manaEventparam == Enums.ManaEvent.AddMana)
             {
+                MicroActionsProcessor.microactionParams.Add("Mana", manaParam.ToString());
+                char separator = '.';
+                string[] splitted = MicroActionsProcessor.microactions[MicroActionsProcessor.index].ToUpper().Split(separator);
+                string MicroActionName = splitted[0];
+                // qui chiama la MicroAzione e aggiorna i bersagli.
 
+                MicroActions.table[MicroActionName](MicroActionsProcessor.microactionParams); // CHIAMATA
+
+                comm.sendMana(shaman.mana);
+                comm.SendOpponentManaChosen(manaParam);// player si aggiorna.
+
+                MicroActionsProcessor.microactions.RemoveAt(MicroActionsProcessor.index); // svuota la posizione [0] di tutte le liste.
+
+                MicroActionsProcessor.targets.RemoveAt(MicroActionsProcessor.index);
+
+                MicroActionsProcessor.microactionParams.Clear();
+
+                MicroActionsProcessor.AcquireMicroactionsParams(); //callback a AcquireMicroactionsParam.
             }
         }
 
@@ -307,10 +324,10 @@ namespace GameLogic
             MicroActions.table[MicroActionName](MicroActionsProcessor.microactionParams); // CHIAMATA
            
             if (id == 0 || id == 1)
-              Game.UpdateCommPlayers(id, Game.FindTargetPlayerById(id).hp); // se il bersaglio era player lo aggiorna.
+              UpdateCommPlayers(id, FindTargetPlayerById(id).hp); // se il bersaglio era player lo aggiorna.
           
             if (id > 1)
-                Game.UpdateCommElemental((Elemental)Game.FindTargetCardByID(id)); // se il bersaglio era elementale lo aggiorna.
+              UpdateCommElemental((Elemental)FindTargetCardByID(id)); // se il bersaglio era elementale lo aggiorna.
               
             //MicroActionsProcessor.index += 1; // incrementa index
             MicroActionsProcessor.microactions.RemoveAt(MicroActionsProcessor.index); // svuota la posizione [0] di tutte le liste.
