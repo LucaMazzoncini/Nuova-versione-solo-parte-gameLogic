@@ -355,11 +355,11 @@ namespace GameLogic
 
         public void ShamanHpUpdate(int hp)
         {
-            opponent.hp = hp;
+            shaman.hp = hp;
         }
         public void OpponentHpUpdate(int hp)
         {
-            shaman.hp = hp;
+            opponent.hp = hp;
         }
         
 

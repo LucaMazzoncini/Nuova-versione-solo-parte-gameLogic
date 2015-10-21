@@ -67,7 +67,23 @@ namespace GameLogic
                     targetsList.Add(Enums.Target.Elemental);
                     break;
                 case "DAMAGEPLAYER":
-                    targetsList.Add(Enums.Target.Player);
+                    bool MustTargetElem = false;
+                    if (Game.FindTargetPlayerById(1).cardsOnBoard != null)
+                        foreach (Elemental elemTemp in Game.FindTargetPlayerById(1).cardsOnBoard)
+                            if (elemTemp.properties.Contains(Enums.Properties.Guardian))
+                            { 
+                                MustTargetElem = true;
+                                break;
+                            }
+                    if (MustTargetElem)
+                    {
+                        targetsList.Add(Enums.Target.Elemental);
+                        targetsList.Add(Enums.Target.Enemy);
+                    }
+
+                    else
+                        targetsList.Add(Enums.Target.Opponent);         
+                                        
                     break;
                 case "DISPEL":
                     targetsList.Add(Enums.Target.Elemental);
@@ -255,14 +271,16 @@ namespace GameLogic
         }
         private static void DamagePlayer(Params param)
         {
-            
             int damageValue = Int32.Parse(param["Value"]);
             int idTarget = Int32.Parse(param["idTarget"]);
-            Player playerTemp;
-            
-            playerTemp = Game.FindTargetPlayerById(idTarget);
-            playerTemp.hp -= damageValue;
-            
+            if (idTarget < 2)
+            {
+                Player playerTemp;
+                playerTemp = Game.FindTargetPlayerById(idTarget);
+                playerTemp.hp -= damageValue;
+            }
+            else
+                DamageElemental(param);
         }
         private static void SelfDamage(Params param)
         {
