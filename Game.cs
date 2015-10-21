@@ -83,7 +83,7 @@ namespace GameLogic
         #region Who start
         public void ThrowDice()
         {
-            ThrowDice(Player.ThrowDice(2));
+            ThrowDice(Player.ThrowDice(999999));
         }
     
         public void ThrowDice(int diceValue)

@@ -118,8 +118,8 @@ namespace GameLogic
                                 validTargets.Add(MicroActions.getTargets(microAct));
                                 RitualMicroactions.Add(microAct);
                             }
-                        MicroActionsProcessor.AcquireValidTargets(validTargets);
                         MicroActionsProcessor.AcquireMicroactions(RitualMicroactions);
+                        MicroActionsProcessor.AcquireValidTargets(validTargets);
                         if (MicroActionsProcessor.canProcessMicroactions())
                             MicroActionsProcessor.AcquireMicroactionsParams();
                        
