@@ -54,16 +54,20 @@ namespace GameLogic
                 {
                     case Enums.Type.Elemental:
                         Elemental ElemTemp = (Elemental)cardTemp; // cast a Elemental.
-                        foreach (Card cTemp in Game.AllCardsOnBoard) // assegna ID all'elementale.
-                            if (idTemp <= cTemp.id)
-                                idTemp = cTemp.id + 1;
+                        if (ElemTemp.rank == 1)
+
+                            foreach (Card cTemp in Game.AllCardsOnBoard) // assegna ID all'elementale.
+                               if (idTemp <= cTemp.id)
+                                    idTemp = cTemp.id + 1;
                         ElemTemp.id = idTemp;
-                        if (ElemTemp.rank > 1) // da qui si attiva tutto quel che succede quando casti un rank 2 o 3 e "sovrascrive" il suo rank 1.
+                
+                if (ElemTemp.rank > 1) // da qui si attiva tutto quel che succede quando casti un rank 2 o 3 e "sovrascrive" il suo rank 1.
                         foreach (Elemental eTemp in cardsOnBoard)
                            if (eTemp.name == ElemTemp.from)
                                 {
                                     ElemTemp.buff = eTemp.buff; // il rank sotto passa buff e debuff a quello sopra.
                                     ElemTemp.debuff = eTemp.debuff;
+                                    ElemTemp.id = eTemp.id;
                                     foreach (Enums.Buff buff in ElemTemp.buff) // modifica Strength e Constitution in base a buff e debuff passati
                                     {
                                         if (buff == Enums.Buff.IncreasedStr)
