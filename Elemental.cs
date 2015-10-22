@@ -78,39 +78,32 @@ namespace GameLogic
                     else
                         targetElem.hp -= 1;
                 }
-                if (this.properties.Contains(Enums.Properties.Thunderborn) && this.hasAttackedThunderborn == false)//controlla se l'attaccante ha Thunderborn e ne cambia il flag;
-                    this.hasAttackedThunderborn = true;
-                else
-                    this.hasAttacked = true;
-                return targetElem;
             }
             else
-            {
-                targetElem.buff.Remove(Enums.Buff.Shield);
-                if (this.properties.Contains(Enums.Properties.Thunderborn) && this.hasAttackedThunderborn == false)
-                    this.hasAttackedThunderborn = true;
-                else
-                    this.hasAttacked = true;
-                return targetElem;
-            }              
+               targetElem.buff.Remove(Enums.Buff.Shield);
+            if (this.properties.Contains(Enums.Properties.Thunderborn) && this.hasAttackedThunderborn == false)
+                this.hasAttackedThunderborn = true;
+            else
+                this.hasAttacked = true;
+            return targetElem;
+
+
         }
         public override bool canAttackElem(Elemental targetElem, Player controller)
         {
-            if (this.hasAttacked == false && !this.debuff.Contains(Enums.Debuff.Asleep)) // check se ha già attaccato o se è addormentato
-            {
-                if (this.properties.Contains(Enums.Properties.Quickness) || this.hasWeakness == false) //check se ha debolezza da evocazione o Quickness
-                {
-                    if (!targetElem.properties.Contains(Enums.Properties.Guardian)) // se il target non ha Guardian, check su tutti gli elementali dell'opponent, per vedere se hanno Guardian.
-                        foreach (Elemental elemTemp in controller.cardsOnBoard)
+            if(this.canAttack())
+            { 
+                if (!targetElem.properties.Contains(Enums.Properties.Guardian)) // se il target non ha Guardian, check su tutti gli elementali dell'opponent, per vedere se hanno Guardian.
+                    foreach (Elemental elemTemp in controller.cardsOnBoard)
                         {
                             if (elemTemp.properties.Contains(Enums.Properties.Guardian))
                                 return false;
                         }
                     return true;
-                }
             }
             return false;
         }
+            
         public override Player attackPlayer(Player targetPlayer) //Attacco l'opponent e ritorno le eventuali modifiche.
         {
             for (int dmg = 0; dmg < this.strength; dmg++)
@@ -125,10 +118,8 @@ namespace GameLogic
         }
         public override bool canAttackPlayer(Player targetPlayer) //controllo se posso attaccare l'opponent oppure possiede una creatura con protezione ecc ecc...
         {
-            if (this.hasAttacked == false && !this.debuff.Contains(Enums.Debuff.Asleep)) // check se ha già attaccato o se è addormentato
-            {
-                if (this.properties.Contains(Enums.Properties.Quickness) || this.hasWeakness == false) //check se ha debolezza da invocazione o Quickness
-                {
+            if(this.canAttack())
+            { 
                     if (targetPlayer.cardsOnBoard != null)
                     {
                         foreach (Elemental elemTemp in targetPlayer.cardsOnBoard)
@@ -138,16 +129,23 @@ namespace GameLogic
                         }
                         return true;
                     }
-                }
             }
-            return false;        
+            return false;
         }
+             
         public override bool canAttack()
         {
             Boolean canattack = true;
 
-            if (this.debuff.Contains(Enums.Debuff.Asleep) || this.hasAttacked == true)
+            if (this.debuff.Contains(Enums.Debuff.Asleep))
                 canattack = false;
+            if (this.hasAttacked == true)
+            { 
+            canattack = false;
+            if (this.properties.Contains(Enums.Properties.Thunderborn))
+                if (this.hasAttackedThunderborn == false)
+                    canattack = true;
+            }
             if (this.hasWeakness == true && !this.properties.Contains(Enums.Properties.Quickness))
                 canattack = false;           
             return canattack;

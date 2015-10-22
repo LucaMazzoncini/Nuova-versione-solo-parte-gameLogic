@@ -67,6 +67,12 @@ namespace GameLogic
                                 {
                                     ElemTemp.buff = eTemp.buff; // il rank sotto passa buff e debuff a quello sopra.
                                     ElemTemp.debuff = eTemp.debuff;
+                                    foreach (Enums.Properties armor in eTemp.properties)
+                                        if (armor == Enums.Properties.Armor)
+                                            ElemTemp.properties.Add(Enums.Properties.Armor);
+                                    ElemTemp.hasAttacked = eTemp.hasAttacked;
+                                    ElemTemp.hasWeakness = eTemp.hasWeakness;
+                                    ElemTemp.hasAttackedThunderborn = eTemp.hasAttackedThunderborn;
                                     ElemTemp.id = eTemp.id;
                                     foreach (Enums.Buff buff in ElemTemp.buff) // modifica Strength e Constitution in base a buff e debuff passati
                                     {
