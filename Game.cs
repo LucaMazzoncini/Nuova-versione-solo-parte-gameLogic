@@ -123,26 +123,30 @@ namespace GameLogic
         #endregion
 
         #region Metodi chiamati da Comunicator
-        public void UpdateElemental(Elemental ele)
+        public void UpdateElemental(Elemental ele)  
         {
-
-            foreach(Elemental eleTemp in shaman.cardsOnBoard)
-            {
+            int indShaman = 0;
+            int indOppo = 0;
+            foreach (Elemental eleTemp in shaman.cardsOnBoard)
+            {              
                 if(eleTemp.id == ele.id)
                 {
-                    shaman.cardsOnBoard.Remove(eleTemp);
+                    shaman.cardsOnBoard.RemoveAt(indShaman);
                     shaman.cardsOnBoard.Insert(0, ele);
+                    break;
                 }
+                indShaman += 1;
 
             }
             foreach (Elemental eleTemp in opponent.cardsOnBoard)
             {
                 if (eleTemp.id == ele.id)
                 {
-                    opponent.cardsOnBoard.Remove(eleTemp);
+                    opponent.cardsOnBoard.RemoveAt(indOppo);
                     opponent.cardsOnBoard.Insert(0, ele);
+                    break;
                 }
-
+                indOppo += 1;
             }
 
 
