@@ -137,6 +137,12 @@ namespace GameLogic
         {
             Boolean canattack = true;
 
+            if (!Game.getInstance().isMyRound())
+            {
+                canattack = false;
+                return canattack;
+            }
+
             if (this.debuff.Contains(Enums.Debuff.Asleep))
                 canattack = false;
             if (this.hasAttacked == true)

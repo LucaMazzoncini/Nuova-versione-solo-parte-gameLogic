@@ -54,18 +54,26 @@ namespace GameLogic
                         MicroActions.table[MicroActionName](microactionParams); // CHIAMATA
 
                         if (targets[index].Contains(Enums.Target.Self)) // aggiorna shaman.
+                        {
                             Game.UpdateCommPlayers(0, Game.FindTargetPlayerById(0).hp);
+                            comm.sendMana(Game.FindTargetPlayerById(0).mana);
+                        }
                         if (targets[index].Contains(Enums.Target.Opponent)) // aggiorna opponent.
+                        {
                             Game.UpdateCommPlayers(1, Game.FindTargetPlayerById(1).hp);
-                        if(targets[index].Contains(Enums.Target.AllAllies)) // aggiorna All Allies.
-                            {
+                            comm.sendMana(Game.FindTargetPlayerById(1).mana);
+                        }
+                        if (targets[index].Contains(Enums.Target.AllAllies)) // aggiorna All Allies.
+                        {
+                            Game.UpdateCommPlayers(0, Game.FindTargetPlayerById(0).hp);
                             if (Game.FindTargetPlayerById(0).cardsOnBoard != null)
-                                foreach (Card cardTemp in Game.FindTargetPlayerById(0).cardsOnBoard)
-                                    if (cardTemp.type == Enums.Type.Elemental)
-                                        Game.UpdateCommElemental((Elemental)cardTemp);
+                                foreach (Elemental elemTemp in Game.FindTargetPlayerById(0).cardsOnBoard)
+                                    if (elemTemp.type == Enums.Type.Elemental)
+                                        Game.UpdateCommElemental(elemTemp);
                         }
                         if (targets[index].Contains(Enums.Target.AllEnemies)) // aggiorna All Enemies.
                         {
+                            Game.UpdateCommPlayers(0, Game.FindTargetPlayerById(1).hp);
                             if (Game.FindTargetPlayerById(1).cardsOnBoard != null)
                                 foreach (Card cardTemp in Game.FindTargetPlayerById(1).cardsOnBoard)
                                     if (cardTemp.type == Enums.Type.Elemental)

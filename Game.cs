@@ -50,7 +50,7 @@ namespace GameLogic
             shaman = new Player(name, 0);         //vanno inizializzati
             opponent = new Player("Opponent", 1); //vanno inizializzati
             comm = Communication.Communicator.getInstance();
-            
+
 
         }
         #region setGet
@@ -85,7 +85,7 @@ namespace GameLogic
         {
             ThrowDice(Player.ThrowDice(999999));
         }
-    
+
         public void ThrowDice(int diceValue)
         {
             diceResult = diceValue;
@@ -93,21 +93,21 @@ namespace GameLogic
 
         public void OnOpponentDiceResult(int opponentDiceResult) //in questa funzione viene stabilito di chi e' il turno
         {
-            
+
             this.opponentDiceResult = opponentDiceResult;
             comm = Communication.Communicator.getInstance();
             comm.sendMana(shaman.mana);
             myRound = false;
             if (diceResult == opponentDiceResult)//questa parte andra' ricontrollata il problema era che nn era inizializzato Comm
             {
-                ThrowDice();                       
+                ThrowDice();
                 comm.game_diceResult(diceResult); //si invia nuovamente il risultato del dado
                 if (diceResult > opponentDiceResult)
                 {
                     myRound = true;
                     FirstRoundStart();
                 }
-                
+
             }
             else
             {
@@ -117,19 +117,19 @@ namespace GameLogic
                 }
                 FirstRoundStart();
             }
-            
+
         }
 
         #endregion
 
         #region Metodi chiamati da Comunicator
-        public void UpdateElemental(Elemental ele)  
+        public void UpdateElemental(Elemental ele)
         {
             int indShaman = 0;
             int indOppo = 0;
             foreach (Elemental eleTemp in shaman.cardsOnBoard)
-            {              
-                if(eleTemp.id == ele.id)
+            {
+                if (eleTemp.id == ele.id)
                 {
                     shaman.cardsOnBoard.RemoveAt(indShaman);
                     shaman.cardsOnBoard.Insert(0, ele);
@@ -157,7 +157,7 @@ namespace GameLogic
             foreach (Card cardTemp in shaman.cardsOnBoard)
                 if (cardTemp.id == id)
                     if (cardTemp.canAttack())
-                    comm.YouCanAttack(id);
+                        comm.YouCanAttack(id);
 
         }
         public void OpponentPlayCard(Card card)
@@ -177,12 +177,12 @@ namespace GameLogic
 
         public void CreateShamanPool(Enums.Mana mana)
         {
-            if(shaman.mana.canCreatePool(mana))
+            if (shaman.mana.canCreatePool(mana))
             {
                 if (shaman.mana.createPool(mana)) //se la creazione e' andata a buon fine viene visualizzata altrimenti no
                 {
                     comm.sendMana(shaman.mana);
-                    comm.sendOpponentPool(mana,shaman.mana.poolList[mana]);
+                    comm.sendOpponentPool(mana, shaman.mana.poolList[mana]);
                     comm.DisplayPool(mana, shaman.mana.poolList[mana]); //fa' visualizzare dalla grafica le polle
                 }
             }
@@ -192,7 +192,7 @@ namespace GameLogic
             if (shaman.mana.canCreatePool(mana) && myRound == true)
                 comm.YesYouCanCreateManaPool(mana);
         }
-       
+
         public LinkedList<Invocation> MenuFiltered(List<Enums.Filter> param) //questa funzione ritorna una linkedList delle carte filtrate
         {
             return bibliotheca.getCards(param, shaman.mana);
@@ -218,12 +218,24 @@ namespace GameLogic
                             elemTemp.hasAttackedThunderborn = false;
                             elemTemp.hasWeakness = false;
                         }
-                            
+            if (opponent.cardsOnBoard != null)
+                if (opponent.cardsOnBoard.Count != 0)
+                    foreach (Elemental elemTemp in opponent.cardsOnBoard)
+                        if (elemTemp.debuff.Contains(Enums.Debuff.Poison))
+                        {
+                            foreach (Enums.Debuff deBuff in elemTemp.debuff)
+                                elemTemp.hp -= 1;
+                            comm.UpdateElemental(elemTemp);
+                        }
+
+
+
+
             comm.setRound(myRound);//invio la chiamata in locale
             comm.ChoseMana(Enums.ManaEvent.NewRound); //Chiedo di selezionare il mana che prendo in manaAtStart
         }
-        
-        public void manaChoosen(Enums.Mana manaParam,Enums.ManaEvent manaEventparam) //mi passa il mana selezionato
+
+        public void manaChoosen(Enums.Mana manaParam, Enums.ManaEvent manaEventparam) //mi passa il mana selezionato
         {
             if (manaEventparam == Enums.ManaEvent.NewRound)
             {
@@ -240,8 +252,9 @@ namespace GameLogic
                                              //Ricordati che ho fatto 3 send mana invece di uno perche' cosi' possiamo fare 3 animazioni distinte in base al mana che viene aggiunto
             }
 
-            if( manaEventparam == Enums.ManaEvent.AddMana)
+            if (manaEventparam == Enums.ManaEvent.AddMana)
             {
+                comm = Communication.Communicator.getInstance();
                 MicroActionsProcessor.microactionParams.Add("Mana", manaParam.ToString());
                 char separator = '.';
                 string[] splitted = MicroActionsProcessor.microactions[MicroActionsProcessor.index].ToUpper().Split(separator);
@@ -274,7 +287,7 @@ namespace GameLogic
                     comm.SendPlayedCard(playedCard);
                 else
                 {
-                    Elemental ele = (Elemental) playedCard;
+                    Elemental ele = (Elemental)playedCard;
                     if (ele.rank < 2)
                         comm.SendPlayedCard(playedCard);
                     else
@@ -283,7 +296,7 @@ namespace GameLogic
             }
         }
         public bool CanPlayCard(string name)
-        {          
+        {
             return shaman.CanPlayCard(bibliotheca.getCardByName(name)) && isMyRound();
         }
 
@@ -315,33 +328,33 @@ namespace GameLogic
                 comm.ResultAttackElemental((Elemental)shaman.cardsOnBoard[indexAttacker], (Elemental)opponent.cardsOnBoard[indexTarget]); // ResultAttack al momento non esiste.
             }
         }
-        
+
         public void TargetReturn(int id)
-        { 
-           
+        {
+
             MicroActionsProcessor.microactionParams.Add("idTarget", id.ToString()); //aggiunge target alla lista di parametri
             char separator = '.';
             string[] splitted = MicroActionsProcessor.microactions[MicroActionsProcessor.index].ToUpper().Split(separator);
             string MicroActionName = splitted[0];
             // qui chiama la MicroAzione e aggiorna i bersagli.
-            
+
             MicroActions.table[MicroActionName](MicroActionsProcessor.microactionParams); // CHIAMATA
-           
+
             if (id == 0 || id == 1)
-              UpdateCommPlayers(id, FindTargetPlayerById(id).hp); // se il bersaglio era player lo aggiorna.
-          
+                UpdateCommPlayers(id, FindTargetPlayerById(id).hp); // se il bersaglio era player lo aggiorna.
+
             if (id > 1)
-              UpdateCommElemental((Elemental)FindTargetCardByID(id)); // se il bersaglio era elementale lo aggiorna.
-              
+                UpdateCommElemental((Elemental)FindTargetCardByID(id)); // se il bersaglio era elementale lo aggiorna. 
+
             //MicroActionsProcessor.index += 1; // incrementa index
             MicroActionsProcessor.microactions.RemoveAt(MicroActionsProcessor.index); // svuota la posizione [0] di tutte le liste.
-           
+
             MicroActionsProcessor.targets.RemoveAt(MicroActionsProcessor.index);
-        
+
             MicroActionsProcessor.microactionParams.Clear();
-         
+
             MicroActionsProcessor.AcquireMicroactionsParams(); //callback a AcquireMicroactionsParam.
-            
+
         }
 
         public void GetValidAttackableTarget(int idAttacker)
@@ -382,37 +395,76 @@ namespace GameLogic
         {
             opponent.hp = hp;
         }
-        
+
 
         public static List<int> FindAllValidTargetsId(List<Enums.Target> targetList) // gli passi una lista di tipi di bersagli validi e ti ritorna la lista degli ID dei bersagli effettivamente validi.
         {
             List<int> idList = new List<int>();
             if (targetList != null)
-                    if (targetList.Contains(Enums.Target.Shaman))
-                        idList.Add(0);
-                    if (targetList.Contains(Enums.Target.Opponent))
+                if (targetList.Contains(Enums.Target.Shaman))
+                    idList.Add(0);
+            if (targetList.Contains(Enums.Target.Opponent))
+                if (IsDamageAction(MicroActionsProcessor.microactions[0]))
+                {
+                    if (!IsAnyGuardian(opponent.cardsOnBoard))
                         idList.Add(1);
-                    if (targetList.Contains(Enums.Target.Player))
-                    {
-                        idList.Add(0);
-                        idList.Add(1);
-                    }
-             if (targetList.Contains(Enums.Target.Elemental))
+                }
+                else
+                    idList.Add(1);
+            if (targetList.Contains(Enums.Target.Player))
             {
+                idList.Add(0);
+
+                if (IsDamageAction(MicroActionsProcessor.microactions[0]))
+                    {
+                        if (!IsAnyGuardian(opponent.cardsOnBoard))
+                            idList.Add(1);
+                    }
+                else
+                    idList.Add(1);
+            }
+            if (targetList.Contains(Enums.Target.Elemental))
+            {
+                char separator = '.';
+                string[] splitted = MicroActionsProcessor.microactions[0].ToUpper().Split(separator);
+
                 if (targetList.Contains(Enums.Target.Ally))
                     foreach (Card cardTemp in shaman.cardsOnBoard)
                         if (cardTemp.type == Enums.Type.Elemental)
-                        idList.Add(cardTemp.id);
+                            idList.Add(cardTemp.id);
                 if (targetList.Contains(Enums.Target.Enemy))
-                    foreach (Card cardTemp in opponent.cardsOnBoard)
-                        if (cardTemp.type == Enums.Type.Elemental)
-                            idList.Add(cardTemp.id);
+                    foreach (Elemental elemTemp in opponent.cardsOnBoard)
+                    {
+                        if (elemTemp.type == Enums.Type.Elemental)
+                            if (IsDamageAction(MicroActionsProcessor.microactions[0]))
+                            {
+                                if (IsAnyGuardian(opponent.cardsOnBoard))
+                                    if (elemTemp.properties.Contains(Enums.Properties.Guardian))
+                                        idList.Add(elemTemp.id);
+                            }
+                            else
+                                idList.Add(elemTemp.id);
+                    }
                 if (!targetList.Contains(Enums.Target.Ally) && !targetList.Contains(Enums.Target.Enemy))
-                    foreach (Card cardTemp in AllCardsOnBoard)
+                {
+                    foreach (Card cardTemp in shaman.cardsOnBoard)
                         if (cardTemp.type == Enums.Type.Elemental)
                             idList.Add(cardTemp.id);
+                    foreach (Elemental elemTemp in opponent.cardsOnBoard)
+                    {
+                        if (elemTemp.type == Enums.Type.Elemental)
+                            if (IsDamageAction(MicroActionsProcessor.microactions[0]))
+                            {
+                                if (IsAnyGuardian(opponent.cardsOnBoard))
+                                    if (elemTemp.properties.Contains(Enums.Properties.Guardian))
+                                        idList.Add(elemTemp.id);
+                            }
+                            else
+                                idList.Add(elemTemp.id);
+                    }
+                }
             }
-             if (targetList.Contains(Enums.Target.Spirit))
+                if (targetList.Contains(Enums.Target.Spirit))
             {
                 if (targetList.Contains(Enums.Target.Ally))
                     foreach (Card cardTemp in shaman.cardsOnBoard)
@@ -570,7 +622,24 @@ namespace GameLogic
                 }
             return false;
         }
-
+        public static bool IsAnyGuardian(List<Card> cardList)
+        {
+            foreach (Card cardTemp in cardList)
+                if (cardTemp.type == Enums.Type.Elemental)
+                {
+                    Elemental elemTemp = (Elemental)cardTemp;
+                    if (elemTemp.properties.Contains(Enums.Properties.Guardian))
+                        return true;
+                }
+            return false;                   
+        }
+        public static bool IsDamageAction(string microaction)
+        {
+            string[] splitted = microaction.ToUpper().Split('.');
+            if (splitted[0] == "DAMAGE" || splitted[0] == "DAMAGEELEMENTAL" || splitted[0] == "DAMAGEENEMYELEMENTAL" || splitted[0] == "DAMAGEPOISONELEMENTAL" ||  splitted[0] == "DAMAGEPLAYER")
+                return true;
+            return false;
+        }
         #endregion
 
         #region Metodi chiamati da altri oggetti a Comunicator

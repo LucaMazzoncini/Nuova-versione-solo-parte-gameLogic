@@ -43,7 +43,7 @@ namespace GameLogic
         }
         public enum Debuff
         {
-            None, Incurable, Asleep, PoisonShaman, PoisonOpponent, DecreasedStr, DecreasedCon
+            None, Incurable, Asleep, Poison, DecreasedStr, DecreasedCon
         }
         public enum Filter
         {

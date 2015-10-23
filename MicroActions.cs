@@ -25,6 +25,7 @@ namespace GameLogic
             MicroActions.table.Add("ARMOR", armor);
             MicroActions.table.Add("HEALARMORELEMENTAL", HealArmorElemental);
             MicroActions.table.Add("KILL", kill);
+            MicroActions.table.Add("KILLALLY", killAlly);
             MicroActions.table.Add("DAMAGE", Damage);
             MicroActions.table.Add("DAMAGEELEMENTAL", DamageElemental);
             MicroActions.table.Add("DAMAGEENEMYELEMENTAL", DamageEnemyElemental);
@@ -64,6 +65,7 @@ namespace GameLogic
                     targetsList.Add(Enums.Target.Enemy);
                     break;
                 case "DAMAGEPOISONELEMENTAL":
+                    targetsList.Add(Enums.Target.Enemy);
                     targetsList.Add(Enums.Target.Elemental);
                     break;
                 case "DAMAGEPLAYER":
@@ -193,7 +195,7 @@ namespace GameLogic
             {
                 Elemental elemTemp = cTemp as Elemental;
                 if (!elemTemp.buff.Contains(Enums.Buff.Immortal))
-                    Game.RemoveCardById(elemTemp.id);
+                    elemTemp.hp = -1;
             }
 
         }
@@ -206,7 +208,7 @@ namespace GameLogic
                 Elemental elemTemp = cTemp as Elemental;
                 if (Game.IsAlly(elemTemp.id))
                     if (!elemTemp.buff.Contains(Enums.Buff.Immortal))
-                        Game.RemoveCardById(elemTemp.id);
+                        elemTemp.hp = -1;
             }
 
         }
@@ -224,41 +226,48 @@ namespace GameLogic
             {
                 Elemental elemTemp;
                 elemTemp = (Elemental)Game.FindTargetCardByID(idTarget);
-                for (int dmg = 0; dmg < damageValue; dmg++)
+                if (elemTemp.buff.Contains(Enums.Buff.Shield))
+                    elemTemp.buff.Remove(Enums.Buff.Shield);
+                else
                 {
-                    if (elemTemp.properties.Contains(Enums.Properties.Armor))
-                        elemTemp.properties.Remove(Enums.Properties.Armor);
-                    else
-                        elemTemp.hp -= 1;
-
-                    if (elemTemp.hp == 0)
-                        if (!elemTemp.buff.Contains(Enums.Buff.Immortal))
+                    for (int dmg = 0; dmg < damageValue; dmg++)
+                    {
+                        if (elemTemp.properties.Contains(Enums.Properties.Armor))
+                            elemTemp.properties.Remove(Enums.Properties.Armor);
+                        else
                         {
-                            Game.RemoveCardById(elemTemp.id);
-                            break;
+                            elemTemp.hp -= 1;
+                            if (elemTemp.debuff.Contains(Enums.Debuff.Asleep))
+                                elemTemp.debuff.Remove(Enums.Debuff.Asleep);
                         }
+                    }
                 }
             }
         }
+        
         private static void DamageElemental(Params param)
         {
             int damageValue = Int32.Parse(param["Value"]);
             int idTarget = Int32.Parse(param["idTarget"]);
             Elemental elemTemp;
             elemTemp = (Elemental)Game.FindTargetCardByID(idTarget);
-            for (int dmg = 0; dmg < damageValue; dmg++)
-            {
-                if (elemTemp.properties.Contains(Enums.Properties.Armor))
-                    elemTemp.properties.Remove(Enums.Properties.Armor);
-                else
-                    elemTemp.hp -= 1;
+            if (elemTemp.buff.Contains(Enums.Buff.Shield))
+                elemTemp.buff.Remove(Enums.Buff.Shield);
+            else {
 
-                if (elemTemp.hp == 0)
-                {
-                    Game.RemoveCardById(elemTemp.id);
-                    break;
-                }
-            }
+                    for (int dmg = 0; dmg < damageValue; dmg++)
+                    {
+                    if (elemTemp.properties.Contains(Enums.Properties.Armor))
+                        elemTemp.properties.Remove(Enums.Properties.Armor);
+                    else
+                    {
+                        elemTemp.hp -= 1;
+                        if (elemTemp.debuff.Contains(Enums.Debuff.Asleep))
+                            elemTemp.debuff.Remove(Enums.Debuff.Asleep);
+                    }
+                   }
+
+             }
         }
         private static void DamageEnemyElemental(Params param)
         {
@@ -266,7 +275,7 @@ namespace GameLogic
         }
         private static void DamagePoisonElemental(Params param)
         {
-            DamageElemental(param);
+            DamageEnemyElemental(param);
             Poison(param);
         }
         private static void DamagePlayer(Params param)
@@ -292,29 +301,56 @@ namespace GameLogic
         {
             int idTarget = Int32.Parse(param["idTarget"]);
             Elemental elemTemp = (Elemental)Game.FindTargetCardByID(idTarget);
-            if (Game.IsAlly(elemTemp.id))
+            if (Game.IsAlly(idTarget))
             {
                 if (elemTemp.debuff != null)
                 {
                     foreach (Enums.Debuff Debuff in elemTemp.debuff)
                     {
-                        if (Debuff == Enums.Debuff.DecreasedStr)
-                            elemTemp.strength += 1;
-                        if (Debuff == Enums.Debuff.DecreasedCon)
-                            elemTemp.constitution += 1;
+                        int indProperty = 0;
+                        foreach (Enums.Properties property in elemTemp.properties)
+                        {
+                            if (Debuff.ToString().Equals(property.ToString()))
+                                elemTemp.properties.RemoveAt(indProperty);
+                            else
+                                indProperty += 1;
+                        }
+                        {
+                            if (Debuff == Enums.Debuff.DecreasedStr)
+                                elemTemp.strength += 1;
+                            if (Debuff == Enums.Debuff.DecreasedCon)
+                            {
+                                elemTemp.constitution += 1;
+                                elemTemp.hp += 1;
+                            }
+                        }
                     }
                     elemTemp.debuff.Clear();
                 }
             }
-            else if (elemTemp.buff != null)
+            else 
             {
-                foreach (Enums.Buff Buff in elemTemp.buff)
-                {
-                    if (Buff == Enums.Buff.IncreasedCon)
-                        elemTemp.constitution -= 1;
-                    if (Buff == Enums.Buff.IncreasedStr)
-                        elemTemp.strength -= 1;
-                }
+                if (elemTemp.buff != null)
+                    foreach (Enums.Buff Buff in elemTemp.buff)
+                    {
+                        int indProperty = 0;
+                        foreach (Enums.Properties property in elemTemp.properties)
+                        {
+                            if (Buff.ToString().Equals(property.ToString()))
+                                elemTemp.properties.RemoveAt(indProperty);
+                            else
+                                indProperty += 1;
+                        }
+                        {
+                            if (Buff == Enums.Buff.IncreasedCon)
+                            {
+                                elemTemp.constitution -= 1;
+                                elemTemp.hp -= 1;
+                            }
+                            if (Buff == Enums.Buff.IncreasedStr)
+                                elemTemp.strength -= 1;
+                        }
+                    }
                 elemTemp.buff.Clear();
             }
         }
@@ -349,7 +385,8 @@ namespace GameLogic
             if (cTemp.GetType() == typeof(Elemental))
             {
                 Elemental elemTemp = (Elemental)cTemp;
-                elemTemp.debuff.Add(Enums.Debuff.Incurable);
+                if (!elemTemp.debuff.Contains(Enums.Debuff.Incurable))
+                    elemTemp.debuff.Add(Enums.Debuff.Incurable);
             }
 
         }
@@ -360,6 +397,7 @@ namespace GameLogic
             if (cTemp.GetType() == typeof(Elemental))
             {
                 Elemental elemTemp = (Elemental)cTemp;
+                if (!elemTemp.debuff.Contains(Enums.Debuff.Asleep))
                 elemTemp.debuff.Add(Enums.Debuff.Asleep);
             }
         }
@@ -370,6 +408,7 @@ namespace GameLogic
             if (cTemp.GetType() == typeof(Elemental))
             {
                 Elemental elemTemp = (Elemental)cTemp;
+                if (!elemTemp.buff.Contains(Enums.Buff.Shield))
                 elemTemp.buff.Add(Enums.Buff.Shield);
             }
         }
@@ -378,20 +417,18 @@ namespace GameLogic
             int idCard = Int32.Parse(param["idTarget"]);
             int poisonValue = Int32.Parse(param["Value"]);
             Card cTemp = Game.FindTargetCardByID(idCard);
-            if (cTemp.GetType() == typeof(Elemental))
-            {
-                Elemental elemTemp = (Elemental)cTemp;
-                int poisonCount = 0;
-                foreach (Enums.Debuff debuff in elemTemp.debuff)
-                    if (debuff.Equals(Enums.Debuff.PoisonShaman)) // la microazione assegna sempre PoisonShaman. i Poison assegnati dall'opponent devono essere visualizzati però come PoisonOpponent.
-                        poisonCount += 1;
-                for (int i = 0; i < poisonValue; i++)
-                    if (poisonCount < 3)
-                    {
-                        elemTemp.debuff.Add(Enums.Debuff.PoisonShaman);
-                        poisonCount += 1;
-                    }
-            }
+
+            Elemental elemTemp = (Elemental)cTemp;
+            int poisonCount = 0;
+            foreach (Enums.Debuff debuff in elemTemp.debuff)
+                if (debuff.Equals(Enums.Debuff.Poison)) 
+                    poisonCount += 1;
+            for (int i = 0; i < poisonValue; i++)
+                if (poisonCount < 3)
+                {
+                    elemTemp.debuff.Add(Enums.Debuff.Poison);
+                    poisonCount += 1;
+                }
         }
         private static void HealElemental(Params param)
         {
@@ -443,8 +480,8 @@ namespace GameLogic
             Player playerTemp = Game.FindTargetPlayerById(0);
             for (int i = 0; i < healValue; i++)
             {
-                if (playerTemp.hp < playerTemp.maxHp)
-                    playerTemp.hp += 1;
+                if (Game.FindTargetPlayerById(0).hp < Game.FindTargetPlayerById(0).maxHp)
+                    Game.FindTargetPlayerById(0).hp += 1;
                 if (playerTemp.cardsOnBoard != null)
                     foreach (Elemental elemTemp in playerTemp.cardsOnBoard)
                         if (elemTemp.hp < elemTemp.constitution && !elemTemp.debuff.Contains(Enums.Debuff.Incurable))
