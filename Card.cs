@@ -11,6 +11,7 @@ namespace GameLogic
         public string name;
         public int id; //identificatore univoco che viene valorizzato quando entra in gioco
         public List<Power> powers = new List<Power>();
+        public bool CanUsePowers = true;
         public Dictionary<Enums.Mana, int> manaCost;
         public Enums.Type type;
         public Enums.SubType subtype;
@@ -22,13 +23,13 @@ namespace GameLogic
 
         string card; // stringa di info parsate da Xml, inizializzata da invocation
 
-        public Card(){}
+        public Card() { }
 
         public Card(string name)
         {
             this.name = name;
         }
-       
+
         public virtual bool canAttackPlayer(Player targetPlayer)
         {
             return false;
@@ -70,9 +71,9 @@ namespace GameLogic
                 if (card.rank > 0)
                     card.from = (string)InvTemp.from.Clone();
                 card.role = InvTemp.role;
-                card.properties = new List<Enums.Properties> (InvTemp.properties);
-                card.onAppear = new List<string> (InvTemp.onAppear);
-                card.onDeath = new List<string> (InvTemp.onDeath);
+                card.properties = new List<Enums.Properties>(InvTemp.properties);
+                card.onAppear = new List<string>(InvTemp.onAppear);
+                card.onDeath = new List<string>(InvTemp.onDeath);
                 return card;
             }
 
@@ -80,10 +81,10 @@ namespace GameLogic
             {
                 Ritual card = new Ritual(InvTemp.name);
                 card.name = (string)InvTemp.name.Clone();
-                card.manaCost = new Dictionary<Enums.Mana, int> (InvTemp.manaCost);
+                card.manaCost = new Dictionary<Enums.Mana, int>(InvTemp.manaCost);
                 card.type = InvTemp.type[0];
                 card.subtype = InvTemp.subType[0];
-                card.powers = new List<Power> (InvTemp.powers);
+                card.powers = new List<Power>(InvTemp.powers);
                 card.castLimit = InvTemp.castLimit;
                 card.card = (string)InvTemp.getCard().Clone();
 
@@ -92,31 +93,31 @@ namespace GameLogic
 
             if (InvTemp.type[0] == Enums.Type.Spirit)
             {
-               Spirit card = new Spirit(InvTemp.name);
+                Spirit card = new Spirit(InvTemp.name);
                 card.name = (string)InvTemp.name.Clone();
                 card.manaCost = new Dictionary<Enums.Mana, int>(InvTemp.manaCost);
                 card.type = InvTemp.type[0];
                 card.subtype = InvTemp.subType[0];
-                card.powers = new List<Power> (InvTemp.powers);
+                card.powers = new List<Power>(InvTemp.powers);
                 card.castLimit = InvTemp.castLimit;
                 card.card = (string)InvTemp.getCard().Clone();
                 Spirit SpiritTemp = new Spirit(this.name);
                 SpiritTemp.name = (string)InvTemp.name.Clone();
-                SpiritTemp.manaCost =new Dictionary<Enums.Mana, int> (InvTemp.manaCost);
+                SpiritTemp.manaCost = new Dictionary<Enums.Mana, int>(InvTemp.manaCost);
                 SpiritTemp.type = InvTemp.type[0];
                 SpiritTemp.subtype = InvTemp.subType[0];
-                SpiritTemp.powers =new List<Power> (InvTemp.powers);
+                SpiritTemp.powers = new List<Power>(InvTemp.powers);
                 SpiritTemp.castLimit = InvTemp.castLimit;
                 SpiritTemp.card = InvTemp.getCard();
                 SpiritTemp.essence = InvTemp.essence;
-                SpiritTemp.onAppear = new List<string> (InvTemp.onAppear);
-                SpiritTemp.onDeath =new List<string> (InvTemp.onDeath);
+                SpiritTemp.onAppear = new List<string>(InvTemp.onAppear);
+                SpiritTemp.onDeath = new List<string>(InvTemp.onDeath);
                 return card;
             }
 
             return null;
 
-        }     
-        
+        }
+       
     }
 }

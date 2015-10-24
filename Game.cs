@@ -161,18 +161,6 @@ namespace GameLogic
 
         }
 
-        public void CanCastPower(int id)
-        {
-            List<String> temp = new List<string>();
-            temp.Add("Nedo.1.Ability.True");
-            temp.Add("Nido.4.Heal.False");
-            comm.CastablePowers(temp);
-        }
-
-        public void CastPower(string power,int idElemental)
-        {
-
-        }
         public void OpponentPlayCard(Card card)
         {
 
@@ -224,6 +212,7 @@ namespace GameLogic
             shaman.mana.setPoolFlag(false);
             if (shaman.cardsOnBoard != null)
                 if (shaman.cardsOnBoard.Count != 0)
+                {
                     foreach (Elemental elemTemp in shaman.cardsOnBoard)
                         if (elemTemp.type == Enums.Type.Elemental)
                         {
@@ -231,9 +220,15 @@ namespace GameLogic
                             elemTemp.hasAttackedThunderborn = false;
                             elemTemp.hasWeakness = false;
                         }
+                    foreach (Card cardTemp in shaman.cardsOnBoard)
+                        cardTemp.CanUsePowers = true;
+                }
+            
+            PowersCooldowns(); // scala clock poteri.
+
             if (opponent.cardsOnBoard != null)
                 if (opponent.cardsOnBoard.Count != 0)
-                    foreach (Elemental elemTemp in opponent.cardsOnBoard)
+                    foreach (Elemental elemTemp in opponent.cardsOnBoard) // poison scalato.
                         if (elemTemp.debuff.Contains(Enums.Debuff.Poison))
                         {
                             foreach (Enums.Debuff deBuff in elemTemp.debuff)
@@ -246,6 +241,19 @@ namespace GameLogic
 
             comm.setRound(myRound);//invio la chiamata in locale
             comm.ChoseMana(Enums.ManaEvent.NewRound); //Chiedo di selezionare il mana che prendo in manaAtStart
+        }
+        public void PowersCooldowns() // scala di 1 il cooldownClock dei powers.
+        {
+            if (isMyRound())
+                foreach (Card cardTemp in shaman.cardsOnBoard)
+                    if (cardTemp.powers != null)
+                        if (cardTemp.powers.Count > 0)
+                        {
+                            cardTemp.CanUsePowers = true;
+                            foreach (Power powTemp in cardTemp.powers)
+                                if (powTemp.clock > 0)
+                                    powTemp.clock -= 1;
+                        }
         }
 
         public void manaChoosen(Enums.Mana manaParam, Enums.ManaEvent manaEventparam) //mi passa il mana selezionato
@@ -311,6 +319,58 @@ namespace GameLogic
         public bool CanPlayCard(string name)
         {
             return shaman.CanPlayCard(bibliotheca.getCardByName(name)) && isMyRound();
+        }
+
+
+        public void CanCastPower(int idCard)
+        {
+                List<string> Pows = new List<string>();
+                Card cardTemp = FindTargetCardByID(idCard);
+                int powIndex = 0;
+
+                if (cardTemp.powers != null)
+                    if (cardTemp.powers.Count > 0)
+                        foreach (Power powTemp in cardTemp.powers)
+                        {
+                            string powString = powIndex.ToString() + "." + powTemp.cooldown.ToString() + ".Ability.";
+                            if (powTemp.IsCastable())
+                                powString += "true";
+                            else
+                                powString += "false";
+                            Pows.Add(powString);
+                            powIndex += 1;
+                        }
+                comm.CastablePowers(Pows);
+                //ogni string in CastablePowers deve avere questo formato: "powerIndex.powercooldown.texture.boolcastabile"
+       }
+        public void CastPower(string power, int idElemental)
+        {
+            if (isMyRound())
+            {
+                int powIndex = Int32.Parse(power);
+                Card cardTemp = FindTargetCardByID(idElemental);
+                Elemental elemTemp = (Elemental)cardTemp;
+                List<List<Enums.Target>> validTargets = new List<List<Enums.Target>>();
+
+                if (cardTemp.CanUsePowers)
+                {
+                    if (!(elemTemp.type == Enums.Type.Elemental && elemTemp.debuff.Contains(Enums.Debuff.Asleep)))
+                    {
+                        if (cardTemp.powers[powIndex].IsCastable())
+                            foreach (string microAct in cardTemp.powers[powIndex].microActions)
+                            {
+                                validTargets.Add(MicroActions.getTargets(microAct));
+                            }
+                        cardTemp.powers[powIndex].clock = cardTemp.powers[powIndex].cooldown;
+                        cardTemp.CanUsePowers = false;
+                        MicroActionsProcessor.AcquireMicroactions(cardTemp.powers[powIndex].microActions);
+                        MicroActionsProcessor.AcquireValidTargets(validTargets);
+                    if (MicroActionsProcessor.canProcessMicroactions())// controlla se le microazioni hanno tutte almeno 1 target valido.
+                            MicroActionsProcessor.AcquireMicroactionsParams();
+                    }
+                }
+            }
+
         }
 
         public void TargetEvent(int idTarget) //questa funzione riceve il target richiesto precedentemente

@@ -147,7 +147,6 @@ namespace GameLogic
             return targetsList;
 
         }
-
         public static List<Enums.Target> getTargets(string actions)
         {
             List<Enums.Target> targetsList = new List<Enums.Target>();
@@ -167,6 +166,26 @@ namespace GameLogic
             targetsList = targetsList.Distinct<Enums.Target>().ToList<Enums.Target>();
 
             return targetsList;
+        }
+        public static bool HasValidTarget(string microaction)
+        {
+            bool hasTarget = false;
+            List<Enums.Target> targetList = getTargets(microaction);
+            foreach (Enums.Target target in targetList)
+            {
+                if (target == Enums.Target.Player || target == Enums.Target.Opponent || target == Enums.Target.Self || target == Enums.Target.None)
+                    hasTarget = true;
+                if (target == Enums.Target.Ally)
+                    if (Game.AllyElementals.Count > 0)
+                            hasTarget = true;
+                if (target == Enums.Target.Enemy)
+                    if (Game.EnemyElementals.Count > 0)
+                            hasTarget = true;
+                if (target == Enums.Target.Elemental)
+                    if (Game.AllyElementals.Count > 0 || Game.EnemyElementals.Count > 0)
+                        hasTarget = true;
+            }
+            return hasTarget;
         }
 
         private static void armor(Params param)
