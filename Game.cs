@@ -160,6 +160,19 @@ namespace GameLogic
                         comm.YouCanAttack(id);
 
         }
+
+        public void CanCastPower(int id)
+        {
+            List<String> temp = new List<string>();
+            temp.Add("Nedo.1.Ability.True");
+            temp.Add("Nido.4.Heal.False");
+            comm.CastablePowers(temp);
+        }
+
+        public void CastPower(string power,int idElemental)
+        {
+
+        }
         public void OpponentPlayCard(Card card)
         {
 
