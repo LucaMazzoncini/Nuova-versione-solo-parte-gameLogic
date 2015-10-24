@@ -123,22 +123,25 @@ namespace GameLogic
         private List<Enums.Role> LoadRoleFromString(string roleString)
         {
             List<Enums.Role> list = new List<Enums.Role>();
-            string[] roleArray = roleString.ToUpper().Split(' ');
-            foreach (string rString in roleArray)
+            if (roleString != "")
             {
-                switch (rString)
+                string[] roleArray = roleString.ToUpper().Split(' ');
+                foreach (string rString in roleArray)
                 {
-                    case "TANK":
-                        list.Add(Enums.Role.Tank);
-                        break;
-                    case "HEALER":
-                        list.Add(Enums.Role.Healer);
-                        break;
-                    case "DPS":
-                        list.Add(Enums.Role.Dps);
-                        break;
-                    default:
-                        break;
+                    switch (rString)
+                    {
+                        case "TANK":
+                            list.Add(Enums.Role.Tank);
+                            break;
+                        case "HEALER":
+                            list.Add(Enums.Role.Healer);
+                            break;
+                        case "DPS":
+                            list.Add(Enums.Role.Dps);
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
             return list;
@@ -147,34 +150,37 @@ namespace GameLogic
         private List<Enums.SubType> LoadSubTypeFromString(string subTypeString)
         {
             List<Enums.SubType> list = new List<Enums.SubType>();
-            string[] subTypeArray = subTypeString.ToUpper().Split(' ');
-            foreach (string sString in subTypeArray)
+            if (subTypeString != "")
             {
-                switch (sString)
+                string[] subTypeArray = subTypeString.ToUpper().Split(' ');
+                foreach (string sString in subTypeArray)
                 {
-                    case"FLORA":
-                        list.Add(Enums.SubType.Flora);
-                        break;
-                    case"MAGMA":
-                        list.Add(Enums.SubType.Magma);
-                        break;
-                    case"VAPOR":
-                        list.Add(Enums.SubType.Vapor);
-                        break;
-                    case"EARTH":
-                        list.Add(Enums.SubType.Earth);
-                        break;
-                    case"WATER":
-                        list.Add(Enums.SubType.Water);
-                        break;
-                    case"FIRE":
-                        list.Add(Enums.SubType.Fire);
-                        break;
-                    case"ANCESTRAL":
-                        list.Add(Enums.SubType.Ancestral);
-                        break;
-                    default:
-                        break;
+                    switch (sString)
+                    {
+                        case "FLORA":
+                            list.Add(Enums.SubType.Flora);
+                            break;
+                        case "MAGMA":
+                            list.Add(Enums.SubType.Magma);
+                            break;
+                        case "VAPOR":
+                            list.Add(Enums.SubType.Vapor);
+                            break;
+                        case "EARTH":
+                            list.Add(Enums.SubType.Earth);
+                            break;
+                        case "WATER":
+                            list.Add(Enums.SubType.Water);
+                            break;
+                        case "FIRE":
+                            list.Add(Enums.SubType.Fire);
+                            break;
+                        case "ANCESTRAL":
+                            list.Add(Enums.SubType.Ancestral);
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
             return list;
@@ -202,29 +208,32 @@ namespace GameLogic
         private List<Enums.Properties> LoadPropertiesFromString(string properties)
         {
             List<Enums.Properties> list = new List<Enums.Properties>();
-            string[] propertiesArray = properties.ToUpper().Split(' ');
-            foreach (string prop in propertiesArray)
+            if (properties != "")
             {
-                switch (prop)
+                string[] propertiesArray = properties.ToUpper().Split(' ');
+                foreach (string prop in propertiesArray)
                 {
-                    case"QUICKNESS":
-                        list.Add(Enums.Properties.Quickness);
-                        break;
-                    case"GUARDIAN":
-                        list.Add(Enums.Properties.Guardian);
-                        break;
-                    case "PENETRATE":
-                        list.Add(Enums.Properties.Penetrate);
-                        break;
-                    case "THUNDERBORN":
-                        list.Add(Enums.Properties.Thunderborn);
-                        break;
-                    case "THORNS.1":
-                        list.Add(Enums.Properties.Thorns);  //ATTENTO qui ci sara' un problema se si utilizza Thorns.x ma per motivi di tempo per adesso e' cosi
-                        break;
-                    default:
-                        list.Add(Enums.Properties.None);
-                        break;
+                    switch (prop)
+                    {
+                        case "QUICKNESS":
+                            list.Add(Enums.Properties.Quickness);
+                            break;
+                        case "GUARDIAN":
+                            list.Add(Enums.Properties.Guardian);
+                            break;
+                        case "PENETRATE":
+                            list.Add(Enums.Properties.Penetrate);
+                            break;
+                        case "THUNDERBORN":
+                            list.Add(Enums.Properties.Thunderborn);
+                            break;
+                        case "THORNS.1":
+                            list.Add(Enums.Properties.Thorns);  //ATTENTO qui ci sara' un problema se si utilizza Thorns.x ma per motivi di tempo per adesso e' cosi
+                            break;
+                        default:
+                            list.Add(Enums.Properties.None);
+                            break;
+                    }
                 }
             }
             return list;
@@ -232,39 +241,45 @@ namespace GameLogic
         private List<Power> LoadPowersFromString(string properties)
         {
             List<Power> list = new List<Power>();
-            string[] propertiesArray = properties.ToUpper().Split(' ');
-            Power temp = null;
-            foreach (string prop in propertiesArray)
+            if (properties != "")
             {
-                if (prop.Contains("COOLDOWN."))
+                string[] propertiesArray = properties.ToUpper().Split(' ');
+                Power temp = null;
+                foreach (string prop in propertiesArray)
                 {
-                    if (temp == null)
+                    if (prop.Contains("COOLDOWN."))
                     {
-                        temp = new Power();
-                        string[] tmpStr = prop.Split('.');
-                        temp.cooldown = Int32.Parse(tmpStr[1]);
+                        if (temp == null)
+                        {
+                            temp = new Power();
+                            string[] tmpStr = prop.Split('.');
+                            temp.cooldown = Int32.Parse(tmpStr[1]);
+                        }
+                    }
+                    else
+                    {
+                        if (temp == null)
+                            temp = new Power();
+                        temp.microActions.Add(prop); //aggiungo le proprietà del potere
                     }
                 }
-                else
-                {
-                    if (temp == null)
-                        temp = new Power();
-                    temp.microActions.Add(prop); //aggiungo le proprietà del potere
-                }
-          }
-            if (temp != null)
+                if (temp != null)
 
-                list.Add(temp); //inserisco l'ultimo processato che altrimenti andrebbe perso  
+                    list.Add(temp); //inserisco l'ultimo processato che altrimenti andrebbe perso  
+            }
             return list;
         }
 
         private List<string> LoadActionsAndEffectFromString(string properties)
         {
             List<string> list = new List<String>();
-            string[] propertiesArray = properties.ToUpper().Split(' ');
-            foreach (string prop in propertiesArray)
+            if (properties != "")
             {
-                list.Add(prop);
+                string[] propertiesArray = properties.ToUpper().Split(' ');
+                foreach (string prop in propertiesArray)
+                {
+                    list.Add(prop);
+                }
             }
             return list;
         }

@@ -95,7 +95,7 @@ namespace GameLogic
                         cardsOnBoard.Insert(0, ElemTemp); // lo mette sul board inserendolo in prima posizione.
                         Game.AllCardsOnBoard.Add(ElemTemp); // lo mette nella listona di tutte le carte sul board.
                         Game.AllyElementals.Add(ElemTemp.target); // aggiunge a lista di bersagli validi sul board.
-                        if (ElemTemp.onAppear != null) // controlla se ci sono microazioni in OnAppear.
+                        if (ElemTemp.onAppear.Count > 0) // controlla se ci sono microazioni in OnAppear.
                             if (ElemTemp.onAppear[0] != "")
                             {
                                 foreach (string microAct in ElemTemp.onAppear)

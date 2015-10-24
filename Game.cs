@@ -324,6 +324,8 @@ namespace GameLogic
 
         public void CanCastPower(int idCard)
         {
+            if (idCard > 1)
+            {
                 List<string> Pows = new List<string>();
                 Card cardTemp = FindTargetCardByID(idCard);
                 int powIndex = 0;
@@ -333,7 +335,7 @@ namespace GameLogic
                         foreach (Power powTemp in cardTemp.powers)
                         {
                             string powString = powIndex.ToString() + "." + powTemp.cooldown.ToString() + ".Ability.";
-                            if (powTemp.IsCastable())
+                            if (powTemp.IsCastable() && cardTemp.CanUsePowers)
                                 powString += "true";
                             else
                                 powString += "false";
@@ -341,6 +343,7 @@ namespace GameLogic
                             powIndex += 1;
                         }
                 comm.CastablePowers(Pows);
+            }
                 //ogni string in CastablePowers deve avere questo formato: "powerIndex.powercooldown.texture.boolcastabile"
        }
         public void CastPower(string power, int idElemental)
@@ -363,7 +366,8 @@ namespace GameLogic
                             }
                         cardTemp.powers[powIndex].clock = cardTemp.powers[powIndex].cooldown;
                         cardTemp.CanUsePowers = false;
-                        MicroActionsProcessor.AcquireMicroactions(cardTemp.powers[powIndex].microActions);
+                        List<string> microaction = new List<string>(cardTemp.powers[powIndex].microActions);
+                        MicroActionsProcessor.AcquireMicroactions(microaction);
                         MicroActionsProcessor.AcquireValidTargets(validTargets);
                     if (MicroActionsProcessor.canProcessMicroactions())// controlla se le microazioni hanno tutte almeno 1 target valido.
                             MicroActionsProcessor.AcquireMicroactionsParams();
