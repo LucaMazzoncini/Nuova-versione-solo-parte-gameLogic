@@ -73,7 +73,7 @@ namespace GameLogic
                     if (Game.FindTargetPlayerById(1).cardsOnBoard != null)
                         foreach (Elemental elemTemp in Game.FindTargetPlayerById(1).cardsOnBoard)
                             if (elemTemp.properties.Contains(Enums.Properties.Guardian))
-                            { 
+                            {
                                 MustTargetElem = true;
                                 break;
                             }
@@ -84,8 +84,8 @@ namespace GameLogic
                     }
 
                     else
-                        targetsList.Add(Enums.Target.Opponent);         
-                                        
+                        targetsList.Add(Enums.Target.Opponent);
+
                     break;
                 case "DISPEL":
                     targetsList.Add(Enums.Target.Elemental);
@@ -166,7 +166,7 @@ namespace GameLogic
             //tolgo le occorrenze inutili dalla lista
             targetsList = targetsList.Distinct<Enums.Target>().ToList<Enums.Target>();
 
-            return targetsList; 
+            return targetsList;
         }
 
         private static void armor(Params param)
@@ -185,7 +185,7 @@ namespace GameLogic
                     elemTemp.properties.Add(Enums.Properties.Armor);
             }
 
-            
+
         }
         private static void kill(Params param)
         {
@@ -244,7 +244,7 @@ namespace GameLogic
                 }
             }
         }
-        
+
         private static void DamageElemental(Params param)
         {
             int damageValue = Int32.Parse(param["Value"]);
@@ -253,10 +253,11 @@ namespace GameLogic
             elemTemp = (Elemental)Game.FindTargetCardByID(idTarget);
             if (elemTemp.buff.Contains(Enums.Buff.Shield))
                 elemTemp.buff.Remove(Enums.Buff.Shield);
-            else {
+            else
+            {
 
-                    for (int dmg = 0; dmg < damageValue; dmg++)
-                    {
+                for (int dmg = 0; dmg < damageValue; dmg++)
+                {
                     if (elemTemp.properties.Contains(Enums.Properties.Armor))
                         elemTemp.properties.Remove(Enums.Properties.Armor);
                     else
@@ -265,9 +266,9 @@ namespace GameLogic
                         if (elemTemp.debuff.Contains(Enums.Debuff.Asleep))
                             elemTemp.debuff.Remove(Enums.Debuff.Asleep);
                     }
-                   }
+                }
 
-             }
+            }
         }
         private static void DamageEnemyElemental(Params param)
         {
@@ -328,7 +329,7 @@ namespace GameLogic
                     elemTemp.debuff.Clear();
                 }
             }
-            else 
+            else
             {
                 if (elemTemp.buff != null)
                     foreach (Enums.Buff Buff in elemTemp.buff)
@@ -398,7 +399,7 @@ namespace GameLogic
             {
                 Elemental elemTemp = (Elemental)cTemp;
                 if (!elemTemp.debuff.Contains(Enums.Debuff.Asleep))
-                elemTemp.debuff.Add(Enums.Debuff.Asleep);
+                    elemTemp.debuff.Add(Enums.Debuff.Asleep);
             }
         }
         private static void Shield(Params param)
@@ -409,7 +410,7 @@ namespace GameLogic
             {
                 Elemental elemTemp = (Elemental)cTemp;
                 if (!elemTemp.buff.Contains(Enums.Buff.Shield))
-                elemTemp.buff.Add(Enums.Buff.Shield);
+                    elemTemp.buff.Add(Enums.Buff.Shield);
             }
         }
         private static void Poison(Params param)
@@ -421,7 +422,7 @@ namespace GameLogic
             Elemental elemTemp = (Elemental)cTemp;
             int poisonCount = 0;
             foreach (Enums.Debuff debuff in elemTemp.debuff)
-                if (debuff.Equals(Enums.Debuff.Poison)) 
+                if (debuff.Equals(Enums.Debuff.Poison))
                     poisonCount += 1;
             for (int i = 0; i < poisonValue; i++)
                 if (poisonCount < 3)
@@ -493,7 +494,7 @@ namespace GameLogic
         {
             int manaValue = Int32.Parse(param["Value"]);
             Enums.Mana manaType = (Enums.Mana)Enum.Parse(typeof(Enums.Mana), param["Mana"], true);
-          
+
             Player playerTemp = Game.FindTargetPlayerById(0);
             Dictionary<Enums.Mana, int> manaToAdd = new Dictionary<Enums.Mana, int>();
             manaToAdd.Add(manaType, manaValue);
@@ -501,49 +502,9 @@ namespace GameLogic
         }
         private static void LostRandomElement(Params param)
         {
-            
-            Player playerTemp = Game.FindTargetPlayerById(1);
-            Random random = new Random();
-            Boolean lost = false;
-            do
-            {
-                int randomNumber = random.Next(1, 6);
-                Enums.Mana manaTemp = new Enums.Mana();
-                if (playerTemp.mana.GetTotalMana() > 0)
-                {
-                    switch (randomNumber)
-                    {
-                        case 1:
-                            manaTemp = Enums.Mana.Water;
-                            break;
-
-                        case 2:
-                            manaTemp = Enums.Mana.Earth;
-                            break;
-
-                        case 3:
-                            manaTemp = Enums.Mana.Fire;
-                            break;
-
-                        case 4:
-                            manaTemp = Enums.Mana.Life;
-                            break;
-
-                        case 5:
-                            manaTemp = Enums.Mana.Death;
-                            break;
-
-                        default:
-                            break;
-                    }
-                    if (playerTemp.mana.valueList[manaTemp] > 0)
-                    {
-                        playerTemp.mana.decMana(manaTemp);
-                        lost = true;
-                    }
-                }
-            } while (lost == false);
+           // Game.LostManaRandomOpponent();
         }
     }
+            
 }
 

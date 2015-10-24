@@ -357,6 +357,59 @@ namespace GameLogic
 
         }
 
+        public void LostManaRandomOpponent()
+        {
+            //comm.LostManaRandomOpponent();
+
+        }
+        public void LostManaRandom()
+        {
+            Player playerTemp = Game.FindTargetPlayerById(0);
+            Random random = new Random();
+            Boolean lost = false;
+            do
+            {
+                int randomNumber = random.Next(1, 6);
+                Enums.Mana manaTemp = new Enums.Mana();
+                if (playerTemp.mana.GetTotalMana() > 0)
+                {
+                    switch (randomNumber)
+                    {
+                        case 1:
+                            manaTemp = Enums.Mana.Water;
+                            break;
+
+                        case 2:
+                            manaTemp = Enums.Mana.Earth;
+                            break;
+
+                        case 3:
+                            manaTemp = Enums.Mana.Fire;
+                            break;
+
+                        case 4:
+                            manaTemp = Enums.Mana.Life;
+                            break;
+
+                        case 5:
+                            manaTemp = Enums.Mana.Death;
+                            break;
+
+                        default:
+                            break;
+                    }
+                    if (playerTemp.mana.valueList[manaTemp] > 0)
+                    {
+                        playerTemp.mana.decMana(manaTemp);
+                        lost = true;
+                    }
+                }
+            } while (lost == false);
+            comm.sendMana(FindTargetPlayerById(0).mana);   
+        }
+    
+
+
         public void GetValidAttackableTarget(int idAttacker)
         {
             List<int> idList = new List<int>();

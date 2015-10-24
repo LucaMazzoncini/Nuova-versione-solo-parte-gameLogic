@@ -61,7 +61,7 @@ namespace GameLogic
                         if (targets[index].Contains(Enums.Target.Opponent)) // aggiorna opponent.
                         {
                             Game.UpdateCommPlayers(1, Game.FindTargetPlayerById(1).hp);
-                            comm.sendMana(Game.FindTargetPlayerById(1).mana);
+                            //comm.sendMana(Game.FindTargetPlayerById(1).mana);
                         }
                         if (targets[index].Contains(Enums.Target.AllAllies)) // aggiorna All Allies.
                         {
