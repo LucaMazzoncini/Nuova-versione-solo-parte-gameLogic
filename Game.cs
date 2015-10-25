@@ -150,6 +150,10 @@ namespace GameLogic
             }
 
 
+            //Da ricontrollare se va' bene qui
+            if (ele.hp < 1)
+                RemoveCardById(ele.id);
+
         }
 
         public void CanAttack(int id)
@@ -403,6 +407,13 @@ namespace GameLogic
                             shaman.cardsOnBoard[indexAttacker].attackElemental((Elemental)opponent.cardsOnBoard[indexTarget]);
                     }
                 comm.ResultAttackElemental((Elemental)shaman.cardsOnBoard[indexAttacker], (Elemental)opponent.cardsOnBoard[indexTarget]); // ResultAttack al momento non esiste.
+
+           /*     Elemental temp = (Elemental)shaman.cardsOnBoard[idAttacker];
+                if (temp.hp < 1)
+                    RemoveCardById(temp.id);
+                temp = (Elemental)opponent.cardsOnBoard[idTarget];
+                if (temp.hp < 1)
+                    RemoveCardById(temp.id);*/
             }
         }
 
