@@ -408,12 +408,12 @@ namespace GameLogic
                     }
                 comm.ResultAttackElemental((Elemental)shaman.cardsOnBoard[indexAttacker], (Elemental)opponent.cardsOnBoard[indexTarget]); // ResultAttack al momento non esiste.
 
-           /*     Elemental temp = (Elemental)shaman.cardsOnBoard[idAttacker];
+                Elemental temp = (Elemental)shaman.cardsOnBoard[indexAttacker];
                 if (temp.hp < 1)
                     RemoveCardById(temp.id);
-                temp = (Elemental)opponent.cardsOnBoard[idTarget];
+                temp = (Elemental)opponent.cardsOnBoard[indexTarget];
                 if (temp.hp < 1)
-                    RemoveCardById(temp.id);*/
+                    RemoveCardById(temp.id);
             }
         }
 
