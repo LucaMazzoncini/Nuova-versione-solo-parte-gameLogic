@@ -6,16 +6,17 @@ namespace GameLogic
 {
     public static class MicroActionsProcessor
     {
-        public static Communication.Communicator comm;
+        public static Communication.Communicator comm = Communication.Communicator.getInstance();
         public static int index = 0;
         public static List<string> microactions = new List<string>(); // stora la lista di microazioni del Power da processare.
         public static List<List<Enums.Target>> targets = new List<List<Enums.Target>>(); // store tutti i target validi di tutte le microazioni di cui è composto il Power. Se una Microaction è associata ad una lista di target vuota, significa che non richiede target in risoluzione.
         public static Dictionary<string, string> microactionParams = new Dictionary<string, string>(); // store di tutti i Param da spedire alle funzioni di MicroActions.table
         //public static List<int> TargetId = new List<int>();
 
-        
+
         public static object AcquireMicroactionsParams()
         {
+            comm = Communication.Communicator.getInstance();
 
             if (index < microactions.Count)
             {

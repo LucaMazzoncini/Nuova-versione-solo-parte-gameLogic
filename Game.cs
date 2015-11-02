@@ -443,6 +443,9 @@ namespace GameLogic
 
             MicroActionsProcessor.AcquireMicroactionsParams(); //callback a AcquireMicroactionsParam.
 
+            comm.PlaySpell("Spell", id); //aggiorna la grafica, al posto di spell ci va' la carta giocata
+
+
         }
 
         public void LostManaRandomOpponent()
